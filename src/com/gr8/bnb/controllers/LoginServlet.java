@@ -23,8 +23,7 @@ public class LoginServlet extends HttpServlet {
 	/**
 	 * 
 	 */
-	private static final String LOGIN_JSP = "/login.jsp";
-	private static final String HOME_JSP  = "/home.jsp";
+	private static final String HOME_JSP  = "/index.jsp";
 	
 	private static final long serialVersionUID = 1L;
 	private ServletConfig config;
@@ -35,27 +34,32 @@ public class LoginServlet extends HttpServlet {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		config.getServletContext().getRequestDispatcher(LOGIN_JSP).forward(request, response);
+		request.setAttribute("isLoginPage", (Boolean) true);
+		config.getServletContext().getRequestDispatcher(HOME_JSP).forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String email = request.getParameter("email");
-		String password = request.getParameter("password");
-		String message = null;
-		String page = LOGIN_JSP;
+		String email = request.getParameter("loginEmail");
+		String password = request.getParameter("loginPassword");
+		//String rememberMe = request.getParameter("remember-me");
+
+		String errorMessage = null;
+
 		HttpSession sesion = request.getSession();
 		
 		User user = User.find(email, password);
 		if (user != null){
-			page = HOME_JSP;
+			/* set the user and mark the session as authenticate */
 			sesion.setAttribute("user", user);
 			sesion.setAttribute("authenticated", true);
-				
 		}else{				
-			message = "Wrong email or password";
+			/* Open login form on load with error message */
+			request.setAttribute("isLoginPage", (Boolean) true);
+			errorMessage = "Wrong email or password";
 		}
-		request.setAttribute("message", message);
-		config.getServletContext().getRequestDispatcher(page).forward(request, response);
+
+		request.setAttribute("LoginErrorMessage", errorMessage);
+		config.getServletContext().getRequestDispatcher(HOME_JSP).forward(request, response);
 	}
 }

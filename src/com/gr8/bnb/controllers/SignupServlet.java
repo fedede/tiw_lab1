@@ -21,8 +21,7 @@ import com.gr8.bnb.models.User;
 		)
 public class SignupServlet extends HttpServlet {
 
-	private static final String SIGNUP_JSP   = "/signup.jsp";
-	private static final String HOME_JSP     = "/home.jsp";
+	private static final String HOME_JSP     = "/index.jsp";
 
 	private static final long serialVersionUID = 1L;
 	private ServletConfig config;
@@ -33,33 +32,41 @@ public class SignupServlet extends HttpServlet {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		config.getServletContext().getRequestDispatcher(SIGNUP_JSP).forward(request, response);
+		request.setAttribute("isSignUpPage", (Boolean) true);
+		config.getServletContext().getRequestDispatcher(HOME_JSP).forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String name     = request.getParameter("name");
-		String surname  = request.getParameter("surname");
-		String email    = request.getParameter("email");
-		String password = request.getParameter("password");
-		String repassword = request.getParameter("repassword");
+		String email    = request.getParameter("inputEmail");
+		String name     = request.getParameter("inputName");
+		String surname  = request.getParameter("inputSurname");
+		String password = request.getParameter("inputPassword");
 
-		String message = checkUserParameters(name, surname, email, password, repassword);
-		String page = SIGNUP_JSP;
 		HttpSession sesion = request.getSession();
 
-		if (message == null) {
+		/* Check if valid parameters an get error */
+		String errorMessage = checkUserParameters(name, surname, email, password);
+
+		/* If no error message try to create the user */
+		if (errorMessage == null) {
 			User user = User.create(name, surname, email, password);
 			if (user != null){				
-				page = HOME_JSP;
 				sesion.setAttribute("user", user);
 				sesion.setAttribute("authenticated", true);
 			} else {				
-				message = "This email account is already registered";
+				errorMessage = "This email account is already registered";
 			}
 		}
-		request.setAttribute("message", message);
-		config.getServletContext().getRequestDispatcher(page).forward(request, response);
+
+		/* If error message send message to the view */
+		if (errorMessage != null) {
+			request.setAttribute("isSignUpPage", (Boolean) true);
+			request.setAttribute("signUpErrorMessage", errorMessage);
+		}
+
+		/* Redirect to home page */
+		config.getServletContext().getRequestDispatcher(HOME_JSP).forward(request, response);
 	}
 	
 	/**
@@ -68,11 +75,10 @@ public class SignupServlet extends HttpServlet {
 	 * @param name Name of the user we want to register, error if blank.
 	 * @param surname Surname of the user we want to register, error if blank.
 	 * @param email Email of the user we want to register, error if blank or not email formatted.
-	 * @param password Password of the user we want to register, error if does not match repassword or less than 8 characters
-	 * @param repassword Repeated password, error if does not match password
+	 * @param password Password of the user we want to register, error less than 8 characters
 	 * @return Error message if error, null otherwise.
 	 */
-	private String checkUserParameters(String name, String surname, String email, String password, String repassword) {
+	private String checkUserParameters(String name, String surname, String email, String password) {
 		final String EMAIL_PATTERN = "^[\\w.%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$";
 		String message = null;
 		if (name == null || name.isEmpty()) {
@@ -85,9 +91,7 @@ public class SignupServlet extends HttpServlet {
 			message = "Email address is not valid. It must have the format: ***@***.**";
 		} else if (password == null || password.length() < 8) {
 			message = "Password shall contain at least 8 characters.";
-		} else if (!password.equals(repassword)) {
-			message = "Password does not match with the retype password";
-		}
+		} 
 		return message;
 	}
 }
