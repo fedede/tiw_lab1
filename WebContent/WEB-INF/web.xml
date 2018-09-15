@@ -4,4 +4,14 @@
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
+  <servlet>
+    <description></description>
+    <display-name>ResultsServlet</display-name>
+    <servlet-name>ResultsServlet</servlet-name>
+    <servlet-class>com.gr8.bnb.controllers.ResultsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ResultsServlet</servlet-name>
+    <url-pattern>/results</url-pattern>
+  </servlet-mapping>
 </web-app>

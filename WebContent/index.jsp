@@ -117,7 +117,7 @@
 								  <!-- Nav tabs -->
 								   <ul class="nav nav-tabs" role="tablist">
 								      <li role="presentation" class="active">
-								    	   <a href="#alojamientos" aria-controls="alojamientos" role="tab" data-toggle="tab">Alojamientos</a>
+								    	   <a href="#accommodations" aria-controls="Accommodations" role="tab" data-toggle="tab">Accommodations</a>
 								      </li>
 								   </ul>
 
@@ -125,77 +125,80 @@
 									<div class="tab-content">
 										<div role="tabpanel" class="tab-pane active" id="hotels">
 									 		<div class="row">
-												<div class="col-xxs-12 col-xs-12 mt">
-													<div class="input-field">
-														<label for="from">Ciudad:</label>
-														<input type="text" class="form-control" id="from-place" placeholder="Madrid, SPAIN"/>
+									 			<form action ="results" method = "POST">
+													<div class="col-xxs-12 col-xs-12 mt">
+														<div class="input-field">
+															<label for="from">City:</label>
+															<input type="text" class="form-control" id="city" name="city" placeholder="Madrid, SPAIN"/>
+														</div>
 													</div>
-												</div>
-												<div class="col-xxs-12 col-xs-6 mt alternate">
-													<div class="input-field">
-														<label for="date-start">Ida:</label>
-														<input type="text" class="form-control" id="date-start" placeholder="mm/dd/yyyy"/>
+													<div class="col-xxs-12 col-xs-6 mt alternate">
+														<div class="input-field">
+															<label for="date-start">Check-in:</label>
+															<input type="text" class="form-control" id="date-start" name="date-start" placeholder="mm/dd/yyyy"/>
+														</div>
 													</div>
-												</div>
-												<div class="col-xxs-12 col-xs-6 mt alternate">
-													<div class="input-field">
-														<label for="date-end">Vuelta:</label>
-														<input type="text" class="form-control" id="date-end" placeholder="mm/dd/yyyy"/>
+													<div class="col-xxs-12 col-xs-6 mt alternate">
+														<div class="input-field">
+															<label for="date-end">Check-out:</label>
+															<input type="text" class="form-control" id="date-end" name="date-end" placeholder="mm/dd/yyyy"/>
+														</div>
 													</div>
-												</div>
-                                            	
-												<div class="col-sm-12 mt">
-													<section>
-														<label for="class">Precio</label>
-														<select class="cs-select cs-skin-border">
-															<option value="" disabled selected>Hasta 35€</option>
-															<option value="P1">Hasta 35€</option>            
-															<option value="P2">36€ - 69€</option>
-															<option value="P3">70€ - 130€</option>
-															<option value="P4">131€ o más</option>
-														</select>
-													</section>
-												</div>
-                                            	
-        										<div class="col-sm-12 mt">
-													<section>
-														<label for="class">Tipo de alojamiento</label>
-														<select class="cs-select cs-skin-border">
-															<option value="" disabled selected>Alojamiento entero</option>
-															<option value="entero">Alojamiento entero</option>
-															<option value="privada">Habitación privada</option>
-															<option value="compartida">Habitación compartida</option>
-														</select>
-													</section>
-												</div>
-                                            	
-												<div class="col-xxs-12 col-xs-6 mt">
-													<section>
-														<label for="class">Adultos:</label>
-														<select class="cs-select cs-skin-border">
-															<option value="" disabled selected>1</option>
-															<option value="1">1</option>
-															<option value="2">2</option>
-															<option value="3">3</option>
-															<option value="4">4</option>
-														</select>
-													</section>
-												</div>
-												<div class="col-xxs-12 col-xs-6 mt">
-													<section>
-														<label for="class">Niños:</label>
-														<select class="cs-select cs-skin-border">
-															<option value="" disabled selected>1</option>
-															<option value="1">1</option>
-															<option value="2">2</option>
-															<option value="3">3</option>
-															<option value="4">4</option>
-														</select>
-													</section>
-												</div>
-												<div class="col-xs-12">
-													<input type="submit" class="btn btn-primary btn-block" value="Buscar">
-												</div>
+	                                            	
+													<div class="col-sm-12 mt">
+														<section>
+															<label for="class">Price</label>
+															
+															<select class="cs-select cs-skin-border" name="price">
+																<option value="" disabled selected>Select Price</option>
+																<option value="P1">Under 35EUR</option>            
+																<option value="P2">36EUR - 69EUR</option>
+																<option value="P3">70EUR - 130EUR�</option>
+																<option value="P4">131EUR or more</option>
+															</select>
+														</section>
+													</div>
+	                                            	
+	        										<div class="col-sm-12 mt">
+														<section>
+															<label for="class">Type of accommodation</label>
+															<select class="cs-select cs-skin-border" name="ac-type">
+																<option value="" disabled selected>Select House Type</option>
+																<option value="full">Full house</option>
+																<option value="private">Private room</option>
+																<option value="shared">Shared room</option>
+															</select>
+														</section>
+													</div>
+	                                            	
+													<div class="col-xxs-12 col-xs-6 mt">
+														<section>
+															<label for="class">Adults:</label>
+															<select class="cs-select cs-skin-border" id="adults" name="adults">
+																<option value="" disabled selected>0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+															</select>
+														</section>
+													</div>
+													<div class="col-xxs-12 col-xs-6 mt">
+														<section>
+															<label for="class">Children:</label>
+															<select class="cs-select cs-skin-border" name="children">
+																<option value="" disabled selected>0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+															</select>
+														</section>
+													</div>
+													<div class="col-xs-12">
+														<input type="submit" class="btn btn-primary btn-block" value="Find">
+													</div>
+												</form>
 											</div>
 										</div>
 									</div>
@@ -206,7 +209,7 @@
 									<h3>TIWbnb</h3>
 									<h2>Plan your stay</h2>
 									<h3>Choose among thousand of available apartments</h3>
-									<p>Since <span class="price">35EUR</span> one night</p>
+									<p>Starting from <span class="price">35EUR</span> one night</p>
 									<!-- <p><a class="btn btn-primary btn-lg" href="#">Get Started</a></p> -->
 								</div>
 							</div>
