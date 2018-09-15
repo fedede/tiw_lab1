@@ -11,18 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.gr8.bnb.models.User;
-
-
 @WebServlet(
-		urlPatterns="/login",
+		urlPatterns="/logout",
 		loadOnStartup=1,
 		initParams={@WebInitParam(name="configuration", value="com.gr8.bnb.controllers")}
 		)
-public class LoginServlet extends HttpServlet {
-	/**
-	 * 
-	 */
+public class LogoutServlet extends HttpServlet {
+
 	private static final String HOME_JSP  = "/index.jsp";
 	
 	private static final long serialVersionUID = 1L;
@@ -33,33 +28,23 @@ public class LoginServlet extends HttpServlet {
 		this.config = config;
 	}
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setAttribute("isLoginPage", (Boolean) true);
-		config.getServletContext().getRequestDispatcher(HOME_JSP).forward(request, response);
-	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String email = request.getParameter("loginEmail");
-		String password = request.getParameter("loginPassword");
-		//String rememberMe = request.getParameter("remember-me");
-
-		String errorMessage = null;
-
 		HttpSession session = request.getSession();
+		String errorMessage = null;
 		
-		User user = User.find(email, password);
-		if (user != null){
-			/* set the user and mark the session as authenticate */
-			session.setAttribute("user", user);
-			session.setAttribute("authenticated", true);
-		}else{				
-			/* Open login form on load with error message */
-			request.setAttribute("isLoginPage", (Boolean) true);
-			errorMessage = "Wrong email or password";
+		Boolean authenticated = (Boolean) session.getAttribute("authenticated");
+		if (authenticated){
+			session.setAttribute("user", null);
+			session.setAttribute("authenticated", false);
+		} else {				
+			errorMessage = "You are not authenticated you cannot log out";
 		}
 
-		request.setAttribute("LoginErrorMessage", errorMessage);
+		if (errorMessage != null) {
+			request.setAttribute("LogoutErrorMessage", errorMessage);
+		}
 		config.getServletContext().getRequestDispatcher(HOME_JSP).forward(request, response);
 	}
 }

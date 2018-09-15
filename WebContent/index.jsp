@@ -85,14 +85,15 @@
 						<ul class="sf-menu" id="fh5co-primary-menu">
 							<li class="active"><a href="index.jsp">Home</a></li>
 							<li ><a href="/viajes.jsp">Apartments</a></li>
-							<li ><a href="/mensajes.jsp">Messages</a></li>                              
 							<c:choose>
 								<c:when test="${sessionScope.authenticated == true}">
-									<li><a href="#" id="userId"><c:out value="${sessionScope.user.name}"/>Profile</a></li>                            
+									<li ><a href="/mensajes.jsp">Messages</a></li>                              
+									<li><a href="#" id="userId"><c:out value="${sessionScope.user.name}"/> Profile</a></li> 
+									<li><a href="#" id="logout">Logout</a></li> 
 								</c:when>
 								<c:otherwise>
-									<li><a href="#" id="SignUp">Sign Up</a></li>                            
-									<li><a href="#" id="Login">Log In</a></li>                            
+									<li><a href="#" id="SignUp">Sign Up</a></li> 
+									<li><a href="#" id="Login">Log In</a></li> 
 								</c:otherwise>
 							</c:choose>
 						</ul>
@@ -218,7 +219,40 @@
 		            
 
 		<c:choose> 
-			<c:when test="${sessionScope.authenticate == true}">
+			<c:when test="${sessionScope.authenticated == true}">
+				<!-- Edit Profile Modal -->
+				<div class="modal fade" id="EditProfileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered" role="document">
+						<div class="modal-content">
+						
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<h1 class="h3 mb-3 font-weight-normal">Edit your data</h1>
+								<c:if test="${requestScope.editProfileErrorMessage != null}">
+									<span style="color: red;"> <c:out value="${requestScope.editProfileErrorMessage}" /></span>
+								</c:if>
+							</div>
+							<div class="modal-body">
+								<form class="form-registro" action="editprofile" method="post">
+									<input type="text" id="editName" name="editName" class="form-control" value="${sessionScope.user.name}" placeholder="Name" required>
+									<input type="text" id="editSurname" name="editSurname" class="form-control" value="${sessionScope.user.surname}" placeholder="Surname" required>              
+									<input type="password" id="editPassword" name="editPassword" class="form-control" placeholder="Password" required>
+									<button class="btn btn-lg btn-primary btn-block" type="submit" id="Registrate">Sign up</button>
+								</form>
+							
+							</div>
+							
+							<div class="modal-footer">
+								<p class="text-center">Do you have an account?<a href="#" id="goSignUpLogin">Log In</a></p>
+							</div>
+						
+						</div>
+					</div>
+				</div>            
+			</c:when>
+			<c:otherwise>
 				<!-- Login Modal -->
 				<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 					<div class="modal-dialog modal-dialog-centered" role="document">
@@ -289,9 +323,7 @@
 						</div>
 					</div>
 				</div>            
-				</c:when>
-				<c:otherwise>
-				</c:otherwise>
+			</c:otherwise>
 		</c:choose>
             
 		<footer>
@@ -400,26 +432,50 @@
 
         
 	<script>
-		<c:if test="${requestScope.isLoginPage}">
-			$("#loginModal").modal("show");
-		</c:if>
+		<c:choose>
 
-		<c:if test="${requestScope.isSignUpPage}">
-			$("#SignUpModal").modal("show");
-		</c:if>
+			<c:when test="${sessionScope.authenticated == true}">
+				<c:if test="${requestScope.isEditPage}">
+					$("#EditProfileModal").modal("show");
+				</c:if>
+				$(document).on('click', '#userId', function () {
+					$("#EditProfileModal").modal("show");
+				});
 
-		$(document).on('click', '#Login', function () {
-			$("#loginModal").modal("show");
-		});
+				$(document).on('click', '#logout', function (e) {
+					$.ajax({
+						type: "POST",
+						url: "${pageContext.request.contextPath}/logout",
+						data: {},
+						success: function (data) {
+							location.reload()
+						}
+					});
+				});
+			</c:when>
 
-		$(document).on('click', '#SignUp', function () {
-			$("#SignUpModal").modal("show");
-		});
+			<c:otherwise>
+				<c:if test="${requestScope.isLoginPage}">
+					$("#loginModal").modal("show");
+				</c:if>
 
-		$(document).on('click', '#goSignUpLogin', function () {
-			$("#SignUpModal").modal("hide");
-			$("#loginModal").modal("show");              
-		});
+				<c:if test="${requestScope.isSignUpPage}">
+					$("#SignUpModal").modal("show");
+				</c:if>
+				$(document).on('click', '#Login', function () {
+					$("#loginModal").modal("show");
+				});
+
+				$(document).on('click', '#SignUp', function () {
+					$("#SignUpModal").modal("show");
+				});
+
+				$(document).on('click', '#goSignUpLogin', function () {
+					$("#SignUpModal").modal("hide");
+					$("#loginModal").modal("show");              
+				});
+			</c:otherwise>
+		</c:choose>
 
 	</script>
         

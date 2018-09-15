@@ -79,6 +79,20 @@ public class User {
 	}
 
 	/**
+	 * Check if a user exists on the database and update it.
+	 * @return: true if the user was updated, false otherwise.
+	 */
+	public boolean update() {
+		User prevUser = find(this.email);
+		if (prevUser == null) {
+			return false;
+		}
+		users.remove(prevUser); // remove previous user
+		users.add(this);        // add updated user
+		return true;
+	}
+
+	/**
 	 * Check if a user exists on the database and delete it if so.
 	 * @return: true if the user was inserted, false otherwise.
 	 */
