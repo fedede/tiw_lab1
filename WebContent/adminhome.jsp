@@ -88,7 +88,7 @@
 						<!-- START #fh5co-menu-wrap -->
 						<nav id="fh5co-menu-wrap" role="navigation">
 							<ul class="sf-menu" id="fh5co-primary-menu">
-								<li><a href="/mensajes.jsp">Messages</a></li>
+								<li><a href="/messages">Messages</a></li>
 								<li><a href="#" id="logout">Logout</a></li>
 							</ul>
 						</nav>
