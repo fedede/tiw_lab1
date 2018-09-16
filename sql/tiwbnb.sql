@@ -23,6 +23,7 @@ CREATE DATABASE /*!32312 IF NOT EXISTS*/ `tiwbnb` /*!40100 DEFAULT CHARACTER SET
 
 USE `tiwbnb`;
 
+GRANT ALL PRIVILEGES ON *.* TO 'tiwbnb'@'localhost'
 --
 -- Table structure for table `homes`
 --
