@@ -21,14 +21,6 @@ public class ResultsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public ResultsServlet() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
@@ -54,9 +46,8 @@ public class ResultsServlet extends HttpServlet {
 		request.setAttribute("accommodationType", request.getParameter("ac-type"));
 		request.setAttribute("adults", request.getParameter("adults"));
 		request.setAttribute("children", request.getParameter("children"));
-		House h = null;
 		try {
-			h = new House(1,
+			House.create(
 					"test house",
 					"full description",
 					"shortdesc",
@@ -72,12 +63,10 @@ public class ResultsServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		ArrayList houseList = (ArrayList) request.getAttribute("houses");
-		if (houseList == null){
-			h.getHouses().add(h);
-			request.setAttribute("houses", h.getHouses());
-			
-		}
+		//ArrayList houseList = (ArrayList) request.getAttribute("houses");
+		//if (houseList == null){
+			request.setAttribute("houses", House.getHouses());
+		//}
 		
 		RequestDispatcher reqDis = request.getRequestDispatcher("/results.jsp");
 		reqDis.forward(request, response);
