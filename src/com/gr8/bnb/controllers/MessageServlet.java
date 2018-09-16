@@ -23,13 +23,13 @@ import com.gr8.bnb.models.User;
 
 
 @WebServlet(
-		urlPatterns="/messages",
+		urlPatterns="/message",
 		loadOnStartup=1,
 		initParams={@WebInitParam(name="configuration", value="com.gr8.bnb.controllers")}
 		)
-public class MessagesServlet extends HttpServlet {
-	private static final String LOGIN_PAGE  = "/login";
-	private static final String MESSAGES_JSP  = "/messages.jsp";
+public class MessageServlet extends HttpServlet {
+	private static final String MESSAGES_PAGE  = "/messages";
+	private static final String LOGIN_PAGE = "/login";
 	
 	private static final long serialVersionUID = 1L;
 	private ServletConfig config;
@@ -40,19 +40,22 @@ public class MessagesServlet extends HttpServlet {
 	}
 	
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		boolean authenticated = Boolean.TRUE == session.getAttribute("authenticated");
 		
 		String page = LOGIN_PAGE;
 		if (authenticated) {
-			page = MESSAGES_JSP;
+			page = MESSAGES_PAGE;
 			
-			User receiver = (User) session.getAttribute("user");
-			ArrayList<Message> messages = Message.findAll(receiver);
+			User owner = User.find(request.getParameter("owner"));
+			User receiver = User.find(request.getParameter("receiver"));
+			String message = (String) request.getParameter("message");
+			Date receivedDate = new Date();
 			
-			request.setAttribute("messages", messages);
+			Message.create(owner,receiver, receivedDate, message);
 		}
+		
 		request.getRequestDispatcher(page).forward(request, response);
 	}
 
