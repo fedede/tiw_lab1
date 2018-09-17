@@ -1,14 +1,11 @@
-package com.gr8.bnb.controllers;
+package com.gr8.bnb.handlers;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-import java.util.Iterator;
 
 // Models
 import com.gr8.bnb.models.House;
@@ -17,14 +14,14 @@ import com.gr8.bnb.models.House;
 /**
  * Servlet implementation class HouseServlet
  */
-public class HouseServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
+public class HouseHandler implements RequestHandler {
 
+	private String HOUSES_PAGE = "/house.jsp";
+	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public String handleGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		int id = Integer.parseInt(request.getParameter("houseId"));
 
@@ -32,16 +29,15 @@ public class HouseServlet extends HttpServlet {
 		if (house != null) {
 			request.setAttribute("foundHouse", house);
 		}
-		
-		RequestDispatcher reqDis = request.getRequestDispatcher("/house.jsp");
-		reqDis.forward(request, response);
+
+		return HOUSES_PAGE;
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	 /*protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
-	}*/
+	public String handlePost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		return null;
+	}
 
 }

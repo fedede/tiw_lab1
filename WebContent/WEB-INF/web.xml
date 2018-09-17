@@ -6,22 +6,40 @@
   </welcome-file-list>
   <servlet>
     <description></description>
-    <display-name>ResultsServlet</display-name>
-    <servlet-name>ResultsServlet</servlet-name>
-    <servlet-class>com.gr8.bnb.controllers.ResultsServlet</servlet-class>
+    <display-name>FrontControllerServlet</display-name>
+    <servlet-name>FrontControllerServlet</servlet-name>
+    <servlet-class>com.gr8.bnb.controllers.FrontControllerServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>ResultsServlet</servlet-name>
+    <servlet-name>FrontControllerServlet</servlet-name>
+    <url-pattern>/login</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FrontControllerServlet</servlet-name>
+    <url-pattern>/logout</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FrontControllerServlet</servlet-name>
+    <url-pattern>/signup</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FrontControllerServlet</servlet-name>
+    <url-pattern>/houses</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FrontControllerServlet</servlet-name>
+    <url-pattern>/messages</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FrontControllerServlet</servlet-name>
+    <url-pattern>/message</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FrontControllerServlet</servlet-name>
     <url-pattern>/results</url-pattern>
   </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>HouseServlet</display-name>
-    <servlet-name>HouseServlet</servlet-name>
-    <servlet-class>com.gr8.bnb.controllers.HouseServlet</servlet-class>
-  </servlet>
   <servlet-mapping>
-    <servlet-name>HouseServlet</servlet-name>
-    <url-pattern>/house</url-pattern>
+    <servlet-name>FrontControllerServlet</servlet-name>
+    <url-pattern>/editprofile</url-pattern>
   </servlet-mapping>
 </web-app>

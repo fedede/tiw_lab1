@@ -1,12 +1,8 @@
-package com.gr8.bnb.controllers;
+package com.gr8.bnb.handlers;
 
 import java.io.IOException;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebInitParam;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -15,29 +11,16 @@ import com.gr8.bnb.models.User;
 import com.gr8.bnb.helpers.InputChecker;
 
 
-@WebServlet(
-		urlPatterns="/editprofile",
-		loadOnStartup=1,
-		initParams={@WebInitParam(name="configuration", value="com.gr8.bnb.controllers")}
-		)
-public class EditProfileServlet extends HttpServlet {
+public class EditProfileHandler implements RequestHandler {
 
 	private static final String HOME_JSP     = "/index.jsp";
 
-	private static final long serialVersionUID = 1L;
-	private ServletConfig config;
-	
-	@Override
-	public void init(ServletConfig config) throws ServletException {
-		this.config = config;
-	}
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public String handleGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setAttribute("isEditProfilePage", (Boolean) true);
-		config.getServletContext().getRequestDispatcher(HOME_JSP).forward(request, response);
+		return HOME_JSP;
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public String handlePost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String name     = request.getParameter("editName");
 		String surname  = request.getParameter("editSurname");
 		String password = request.getParameter("editPassword");
@@ -60,8 +43,6 @@ public class EditProfileServlet extends HttpServlet {
 			if (!user.update()) {
 				errorMessage = "Cannot update user on the database";
 			}
-		} else {
-			errorMessage = "You are trying to access without login"; // This message should never be displayed
 		}
 
 		/* If error message send message to the view */
@@ -71,6 +52,6 @@ public class EditProfileServlet extends HttpServlet {
 		}
 
 		/* Redirect to home page */
-		config.getServletContext().getRequestDispatcher(HOME_JSP).forward(request, response);
+		return HOME_JSP;
 	}
 }

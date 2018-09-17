@@ -1,12 +1,10 @@
-package com.gr8.bnb.controllers;
+package com.gr8.bnb.handlers;
 
 import java.io.IOException;
 import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,28 +15,28 @@ import com.gr8.bnb.models.House;
 /**
  * Servlet implementation class searchServlet
  */
-public class ResultsServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+public class ResultsHandler implements  RequestHandler {
 
+	private final String RESULTS_PAGE = "/results.jsp";
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	public String handleGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-		System.out.println("IN RESULTS GET");
+
+		return null;
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	public String handlePost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
 		SimpleDateFormat format = new SimpleDateFormat("dd-MM-YYYY");
-		// TODO Auto-generated method stub
+
 		request.setAttribute("city", request.getParameter("city"));
 		request.setAttribute("startDate", request.getParameter("date-start"));
 		request.setAttribute("endDate", request.getParameter("date-end"));
@@ -46,6 +44,7 @@ public class ResultsServlet extends HttpServlet {
 		request.setAttribute("accommodationType", request.getParameter("ac-type"));
 		request.setAttribute("adults", request.getParameter("adults"));
 		request.setAttribute("children", request.getParameter("children"));
+		
 		try {
 			House.create(
 					"test house",
@@ -65,11 +64,10 @@ public class ResultsServlet extends HttpServlet {
 		}
 		//ArrayList houseList = (ArrayList) request.getAttribute("houses");
 		//if (houseList == null){
-			request.setAttribute("houses", House.getHouses());
+		request.setAttribute("houses", House.getHouses());
 		//}
-		
-		RequestDispatcher reqDis = request.getRequestDispatcher("/results.jsp");
-		reqDis.forward(request, response);
+
+		return RESULTS_PAGE;
 	}
 
 }
