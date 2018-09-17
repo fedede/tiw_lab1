@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.omg.PortableInterceptor.HOLDING;
 
 import com.gr8.bnb.handlers.RequestHandler;
 
@@ -55,7 +54,7 @@ public class FrontControllerServlet extends HttpServlet {
 		noAuthGet.add(SIGNUP_PAGE);
 		noAuthGet.add(HOUSES_PAGE);
 		noAuthGet.add(RESULTS_PAGE);
-		
+
 		noAuthPost.add(LOGIN_PAGE);
 		noAuthPost.add(SIGNUP_PAGE);
 		
