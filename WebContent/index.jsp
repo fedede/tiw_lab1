@@ -91,7 +91,7 @@
 									<li><a href="#" id="userId"><c:out value="${sessionScope.user.name}"/>Profile</a></li>                            
 								</c:when>
 								<c:otherwise>
-									<li><a href="#" id="SignUp">Sign Up</a></li>                            
+									<li><a href="#" id="">Sign Up</a></li>                            
 									<li><a href="#" id="Login">Log In</a></li>                            
 								</c:otherwise>
 							</c:choose>
@@ -124,31 +124,32 @@
 									<div class="tab-content">
 										<div role="tabpanel" class="tab-pane active" id="hotels">
 									 		<div class="row">
-									 			<form action = "index.jsp" method = "POST">
+									 			<form action ="results" method = "POST">
 													<div class="col-xxs-12 col-xs-12 mt">
 														<div class="input-field">
 															<label for="from">City:</label>
-															<input type="text" class="form-control" id="from-place" placeholder="Madrid, SPAIN"/>
+															<input type="text" class="form-control" id="city" name="city" placeholder="Madrid, SPAIN"/>
 														</div>
 													</div>
 													<div class="col-xxs-12 col-xs-6 mt alternate">
 														<div class="input-field">
 															<label for="date-start">Check-in:</label>
-															<input type="text" class="form-control" id="date-start" placeholder="mm/dd/yyyy"/>
+															<input type="text" class="form-control" id="date-start" name="date-start" placeholder="mm/dd/yyyy"/>
 														</div>
 													</div>
 													<div class="col-xxs-12 col-xs-6 mt alternate">
 														<div class="input-field">
 															<label for="date-end">Check-out:</label>
-															<input type="text" class="form-control" id="date-end" placeholder="mm/dd/yyyy"/>
+															<input type="text" class="form-control" id="date-end" name="date-end" placeholder="mm/dd/yyyy"/>
 														</div>
 													</div>
 	                                            	
 													<div class="col-sm-12 mt">
 														<section>
 															<label for="class">Price</label>
-															<select class="cs-select cs-skin-border">
-																<option value="" disabled selected>Under 35EUR</option>
+															
+															<select class="cs-select cs-skin-border" name="price">
+																<option value="" disabled selected>Select Price</option>
 																<option value="P1">Under 35EUR</option>            
 																<option value="P2">36EUR - 69EUR</option>
 																<option value="P3">70EUR - 130EUR¬</option>
@@ -160,8 +161,8 @@
 	        										<div class="col-sm-12 mt">
 														<section>
 															<label for="class">Type of accommodation</label>
-															<select class="cs-select cs-skin-border">
-																<option value="" disabled selected>Full House</option>
+															<select class="cs-select cs-skin-border" name="ac-type">
+																<option value="" disabled selected>Select House Type</option>
 																<option value="full">Full house</option>
 																<option value="private">Private room</option>
 																<option value="shared">Shared room</option>
@@ -172,8 +173,8 @@
 													<div class="col-xxs-12 col-xs-6 mt">
 														<section>
 															<label for="class">Adults:</label>
-															<select class="cs-select cs-skin-border">
-																<option value="" disabled selected>1</option>
+															<select class="cs-select cs-skin-border" id="adults" name="adults">
+																<option value="" disabled selected>0</option>
 																<option value="1">1</option>
 																<option value="2">2</option>
 																<option value="3">3</option>
@@ -184,8 +185,8 @@
 													<div class="col-xxs-12 col-xs-6 mt">
 														<section>
 															<label for="class">Children:</label>
-															<select class="cs-select cs-skin-border">
-																<option value="" disabled selected>1</option>
+															<select class="cs-select cs-skin-border" name="children">
+																<option value="" disabled selected>0</option>
 																<option value="1">1</option>
 																<option value="2">2</option>
 																<option value="3">3</option>
