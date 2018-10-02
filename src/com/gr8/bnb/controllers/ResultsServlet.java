@@ -1,6 +1,8 @@
 package com.gr8.bnb.controllers;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -34,16 +36,17 @@ public class ResultsServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		System.out.println("IN RESULTS POST");
-		String city = request.getParameter("city");
-		String startDate = request.getParameter("date-start");
-		String endDate = request.getParameter("date-end");
-		String price = request.getParameter("price");
-		String accommodationType = request.getParameter("ac-type");
-		String adults = request.getParameter("adults");
-		String children = request.getParameter("children");
+		request.setAttribute("city", request.getParameter("city"));
+		request.setAttribute("startDate", request.getParameter("date-start"));
+		request.setAttribute("endDate", request.getParameter("date-end"));
+		request.setAttribute("price", request.getParameter("price"));
+		request.setAttribute("accommodationType", request.getParameter("ac-type"));
+		request.setAttribute("adults", request.getParameter("adults"));
+		request.setAttribute("children", request.getParameter("children"));
 		
-		response.getWriter().append(city + " || " + startDate + " || " + endDate + " || " +  price  + " || " + accommodationType + " || " + adults + " || " + children);
+		RequestDispatcher reqDis =
+				request.getRequestDispatcher("/results.jsp");
+				reqDis.forward(request, response);
 	}
 
 }

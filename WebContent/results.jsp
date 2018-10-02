@@ -1,4 +1,5 @@
-
+<%-- Add JSTL support --%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -82,11 +83,19 @@
 					<!-- START #fh5co-menu-wrap -->
 					<nav id="fh5co-menu-wrap" role="navigation">
 						<ul class="sf-menu" id="fh5co-primary-menu">
-							<li class="active"><a href="index.html">Home</a></li>
-							<li ><a href="viajes.html">Viajes</a></li>
-							<li ><a href="mensajes.html">Mensajes</a></li>                              
-							<li><a href="#" id="Registro">Regístrate</a></li>                            
-							<li><a href="#" id="Login">Inicia sesión</a></li>                            
+							<li class="active"><a href="index.jsp">Home</a></li>
+							<li ><a href="/viajes.jsp">Apartments</a></li>
+							<c:choose>
+								<c:when test="${sessionScope.authenticated == true}">
+									<li ><a href="/mensajes.jsp">Messages</a></li>                              
+									<li><a href="#" id="userId"><c:out value="${sessionScope.user.name}"/> Profile</a></li> 
+									<li><a href="#" id="logout">Logout</a></li> 
+								</c:when>
+								<c:otherwise>
+									<li><a href="#" id="SignUp">Sign Up</a></li> 
+									<li><a href="#" id="Login">Log In</a></li> 
+								</c:otherwise>
+							</c:choose>                          
 						</ul>
 					</nav>
 				</div>
@@ -99,8 +108,8 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-md-8 col-md-offset-2 text-center heading-section animate-box">
-						<h3>Resultados</h3>
-						<p>Estos son los resultados de acuerdo a tu selección.</p>
+						<h3>Results</h3>
+						<p>These are the results for your choice in <c:out value="${city}" />.</p>
 					</div>
 				</div>
 				<div class="row row-bottom-padded-md">
@@ -110,8 +119,8 @@
 								<span></span>
 								<h3>Estudio en Sol</h3>
 								<span>Apartamento entero. 2 camas</span>
-								<span class="price">60€</span>
-								<a class="btn btn-primary btn-outline" href="#">Seleccionar <i class="icon-arrow-right22"></i></a>
+								<span class="price">60EUR</span>
+								<a class="btn btn-primary btn-outline" href="#">Select <i class="icon-arrow-right22"></i></a>
 							</div>
 						</div>
 					</div>
@@ -121,7 +130,7 @@
 								<span></span>
 								<h3>Apartamento junto a Gran Via</h3>
 								<span>Apartamento entero. 1 cama</span>
-								<span class="price">70€</span>
+								<span class="price">70EUR�</span>
 								<a class="btn btn-primary btn-outline" href="#">Seleccionar <i class="icon-arrow-right22"></i></a>
 							</div>
 						</div>
