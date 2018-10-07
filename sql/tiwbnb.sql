@@ -18,7 +18,7 @@ CREATE TABLE `homes` (
   `city` varchar(45) NOT NULL,
   `full_desc` text NOT NULL,
   `short_desc` tinytext NOT NULL,
-  `apartment_or_private` binary(1) NOT NULL,
+  `is_private` binary(1) NOT NULL,
   `guest_num` int(11) NOT NULL,
   `img` varchar(45) NOT NULL,
   `price` decimal(3,2) NOT NULL,
