@@ -1,6 +1,7 @@
 <%-- Add JSTL support --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<page import=com.gr8.bb.models.House> <!DOCTYPE html> <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<page import=com.gr8.bb.models.House> 
+<!DOCTYPE html> <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]--> <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
 <html class="no-js">
@@ -136,92 +137,13 @@
 										<span></span>
 										<h3>${house.getName()}</h3>
 										<span>${house.getShortDesc()}</span> <span class="price">${house.getPrice()}EUR</span>
-										<a class="btn btn-primary btn-outline" href="#">Select <i
+										<a class="btn btn-primary btn-outline" href="house?houseId=${house.id}">Select <i
 											class="icon-arrow-right22"></i></a>
 									</div>
 								</div>
 							</div>
 						</c:forEach>
-						<div class="col-md-4 col-sm-6 fh5co-tours animate-box"
-							data-animate-effect="fadeIn">
-							<div href="#">
-								<img src="images/place-2.jpg"
-									alt="Free HTML5 Website Template by FreeHTML5.co"
-									class="img-responsive">
-								<div class="desc">
-									<span></span>
-									<h3>Apartamento junto a Gran Via</h3>
-									<span>Apartamento entero. 1 cama</span> <span class="price">70EUR�</span>
-									<a class="btn btn-primary btn-outline" href="#">Seleccionar
-										<i class="icon-arrow-right22"></i>
-									</a>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4 col-sm-6 fh5co-tours animate-box"
-							data-animate-effect="fadeIn">
-							<div href="#">
-								<img src="images/place-3.jpg"
-									alt="Free HTML5 Website Template by FreeHTML5.co"
-									class="img-responsive">
-								<div class="desc">
-									<span></span>
-									<h3>Piso frente al Palacio Real</h3>
-									<span>Loft entero. 2 camas</span> <span class="price">80€</span>
-									<a class="btn btn-primary btn-outline" href="#">Seleccionar
-										<i class="icon-arrow-right22"></i>
-									</a>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4 col-sm-6 fh5co-tours animate-box"
-							data-animate-effect="fadeIn">
-							<div href="#">
-								<img src="images/place-1.jpg"
-									alt="Free HTML5 Website Template by FreeHTML5.co"
-									class="img-responsive">
-								<div class="desc">
-									<span></span>
-									<h3>Céntrico y tranquilo</h3>
-									<span>Apartamento entero. 2 camas</span> <span class="price">65€</span>
-									<a class="btn btn-primary btn-outline" href="#">Seleccionar
-										<i class="icon-arrow-right22"></i>
-									</a>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4 col-sm-6 fh5co-tours animate-box"
-							data-animate-effect="fadeIn">
-							<div href="#">
-								<img src="images/place-2.jpg"
-									alt="Free HTML5 Website Template by FreeHTML5.co"
-									class="img-responsive">
-								<div class="desc">
-									<span></span>
-									<h3>Stunning Apartment in Sol</h3>
-									<span>Apartamento entero. 2 camas</span> <span class="price">50€</span>
-									<a class="btn btn-primary btn-outline" href="#">Seleccionar
-										<i class="icon-arrow-right22"></i>
-									</a>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4 col-sm-6 fh5co-tours animate-box"
-							data-animate-effect="fadeIn">
-							<div href="#">
-								<img src="images/place-3.jpg"
-									alt="Free HTML5 Website Template by FreeHTML5.co"
-									class="img-responsive">
-								<div class="desc">
-									<span></span>
-									<h3>Pretty Apartment in Plaza Mayor</h3>
-									<span>Apartamento entero. 1 cama</span> <span class="price">30€</span>
-									<a class="btn btn-primary btn-outline" href="#">Seleccionar
-										<i class="icon-arrow-right22"></i>
-									</a>
-								</div>
-							</div>
-						</div>
+						
 					</div>
 
 				</div>
