@@ -14,4 +14,14 @@
     <servlet-name>ResultsServlet</servlet-name>
     <url-pattern>/results</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>HouseServlet</display-name>
+    <servlet-name>HouseServlet</servlet-name>
+    <servlet-class>com.gr8.bnb.controllers.HouseServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>HouseServlet</servlet-name>
+    <url-pattern>/house</url-pattern>
+  </servlet-mapping>
 </web-app>
