@@ -21,7 +21,7 @@ CREATE TABLE `homes` (
   `is_private` binary(1) NOT NULL,
   `guest_num` int(11) NOT NULL,
   `img` varchar(45) NOT NULL,
-  `price` decimal(3,2) NOT NULL,
+  `price` int(3) NOT NULL,
   `init_date` date NOT NULL,
   `end_date` date NOT NULL,
   `owner` varchar(45) NOT NULL,
