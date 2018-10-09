@@ -30,8 +30,11 @@ public class User {
 		this.email = email;
 		this.password = password;
 	}
-
+	
 	/* GETTERS AND SETTERS */
+	public static ArrayList<User> getUsers(){
+		return users;
+	}
 	public String getName() {
 		return name;
 	}

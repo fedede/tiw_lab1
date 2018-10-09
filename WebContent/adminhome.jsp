@@ -1,39 +1,161 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"
-    import="java.util.ArrayList"			
-    import="java.util.List" %>
-    <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-    
-    <!-- NOTE WE IMPORTED THE ARRAYLIST AND LIST  -->
-    
-<!DOCTYPE html>
-<html>
+<%-- Add JSTL support --%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<page import=com.gr8.bnb.models.House> <!DOCTYPE html> <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]--> <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-<style type="text/css">
-.error{color:red;}
-</style>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>TIWbnb</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Free HTML5 Template by FREEHTML5.CO" />
+<meta name="keywords"
+	content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
+<meta name="author" content="FREEHTML5.CO" />
+
+<!-- 
+	//////////////////////////////////////////////////////
+
+	FREE HTML5 TEMPLATE 
+	DESIGNED & DEVELOPED by FREEHTML5.CO
+		
+	Website: 		http://freehtml5.co/
+	Email: 			info@freehtml5.co
+	Twitter: 		http://twitter.com/fh5co
+	Facebook: 		https://www.facebook.com/fh5co
+
+	//////////////////////////////////////////////////////
+	 -->
+
+<!-- Facebook and Twitter integration -->
+<meta property="og:title" content="" />
+<meta property="og:image" content="" />
+<meta property="og:url" content="" />
+<meta property="og:site_name" content="" />
+<meta property="og:description" content="" />
+<meta name="twitter:title" content="" />
+<meta name="twitter:image" content="" />
+<meta name="twitter:url" content="" />
+<meta name="twitter:card" content="" />
+
+<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+<link rel="shortcut icon" href="favicon.ico">
+
+<link
+	href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,300'
+	rel='stylesheet' type='text/css'>
+
+<!-- Animate.css -->
+<link rel="stylesheet" href="css/animate.css">
+<!-- Icomoon Icon Fonts-->
+<link rel="stylesheet" href="css/icomoon.css">
+<!-- Bootstrap  -->
+<link rel="stylesheet" href="css/bootstrap.css">
+<!-- Superfish -->
+<link rel="stylesheet" href="css/superfish.css">
+<!-- Magnific Popup -->
+<link rel="stylesheet" href="css/magnific-popup.css">
+<!-- Date Picker -->
+<link rel="stylesheet" href="css/bootstrap-datepicker.min.css">
+<!-- CS Select -->
+<link rel="stylesheet" href="css/cs-select.css">
+<link rel="stylesheet" href="css/cs-skin-border.css">
+
+<link rel="stylesheet" href="css/style.css">
+
+
+<!-- Modernizr JS -->
+<script src="js/modernizr-2.6.2.min.js"></script>
+<!-- FOR IE9 below -->
+<!--[if lt IE 9]>
+	<script src="js/respond.min.js"></script>
+	<![endif]-->
+
 </head>
 <body>
-<h1>Hello</h1>
-<h2>Your name is:</h2> <!-- Display the value of the attribute "nombre" of the object "usuario" stored in the session -->
-<h2>Your password is: </h2> <!-- Display the value of the attribute "password" of the object "usuario" stored in the session -->
+	<div id="fh5co-wrapper">
+		<div id="fh5co-page" class="fh5co-section-gray">
 
-<h3>Here you have the list of users</h3>
-<!--  If you couldn't get the list of users (because yiou access this jsp straight away instead of from the servlet)
-      show here an error message -->
+			<header id="fh5co-header-section" class="sticky-banner">
+				<div class="container">
+					<div class="nav-header">
+						<a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle dark"><i></i></a>
+						<h1 id="fh5co-logo">
+							<a href="index"><i class="icon-airplane"></i>TIWbnb</a>
+						</h1>
+						<!-- START #fh5co-menu-wrap -->
+						<nav id="fh5co-menu-wrap" role="navigation">
+							<ul class="sf-menu" id="fh5co-primary-menu">
+								<li><a href="/mensajes.jsp">Messages</a></li>
+								<li><a href="#" id="logout">Logout</a></li>
+							</ul>
+						</nav>
+					</div>
+				</div>
+			</header>
 
-<table border="1">
-<tr>
-<th>Name</th>
-<th>Surname</th>
-<th>Password</th>
+			<!-- end:header-top -->
 
-</tr>
-<!--  If there are users show them here, each in a different row of the table-->
-  </table>
+			<div id="fh5co-tours" class="fh5co-section-gray" style="width:100%">
+				<table>
+					<tr>
+						<th>Email</th>
+						<th>Name</th>
+						<th>Surname</th>
+						<th>Edit</th>
+						<th>Delete</th>
+					</tr>
+					<c:forEach items="${usersList}" var="users">
+						<tr>
+							<td>${users.getEmail()}</td>
+							<td>${users.getName()}</td>
+							<td>${users.getSurname()}</td>
+						</tr>
+						
+					</c:forEach>
+				</table>
+			</div>
+		</div>
+		<!-- END fh5co-page -->
 
-<p><a href="login.jsp">Back</a></p>
+	</div>
+	<!-- END fh5co-wrapper -->
+
+
+	<!-- jQuery -->
+
+	<script src="js/jquery.min.js"></script>
+	<!-- jQuery Easing -->
+	<script src="js/jquery.easing.1.3.js"></script>
+	<!-- Bootstrap -->
+	<script src="js/bootstrap.min.js"></script>
+	<!-- Waypoints -->
+	<script src="js/jquery.waypoints.min.js"></script>
+	<script src="js/sticky.js"></script>
+
+	<!-- Stellar -->
+	<script src="js/jquery.stellar.min.js"></script>
+	<!-- Superfish -->
+	<script src="js/hoverIntent.js"></script>
+	<script src="js/superfish.js"></script>
+	<!-- Magnific Popup -->
+	<script src="js/jquery.magnific-popup.min.js"></script>
+	<script src="js/magnific-popup-options.js"></script>
+	<!-- Date Picker -->
+	<script src="js/bootstrap-datepicker.min.js"></script>
+	<!-- CS Select -->
+	<script src="js/classie.js"></script>
+	<script src="js/selectFx.js"></script>
+
+	<!-- Main JS -->
+	<script src="js/main.js"></script>
+
+
+	<script>
+		
+	</script>
+
 </body>
 </html>
