@@ -1,7 +1,12 @@
 package com.gr8.bnb.controllers;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebInitParam;
@@ -10,8 +15,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import com.gr8.bnb.models.User;
 
 
 
@@ -57,9 +60,7 @@ public class AdminLoginServlet extends HttpServlet {
 			
 			if (user.equals("admin") && password.equals("admin")){				
 				page = ADMIN_HOME;
-				session.setAttribute("admin_authenticated", true);
-				session.setAttribute("usersList",User.getUsers());
-				
+				session.setAttribute("authenticated", true);
 				
 			}else{		
 				message = "Wrong username or password";
