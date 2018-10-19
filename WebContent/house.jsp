@@ -133,7 +133,7 @@
                             <input type="book" class="btn btn-primary btn-block" value="Book">
                         </div>
                         <div class="col-xxs-12 col-xs-6 mt">
-                            <input type="contact" class="btn btn-primary btn-block" value="Contact">
+                            <input id="contact" type="contact" class="btn btn-primary btn-block" value="Contact">
                         </div>
                                                                         
                     </div>
@@ -143,6 +143,29 @@
 				</div>
 			</div>
 		</div>
+		<div class="modal fade" id="SendMessageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+				
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h1 class="h3 mb-3 font-weight-normal">Write your message</h1>
+					</div>
+					<div class="modal-body">
+						<form class="form-registro" action="message" method="post" id="message-form">
+							<input type="hidden" id="owner" name="owner" class="form-control" value="${requestScope.foundHouse.getOwner().getEmail()}">
+							<input type="hidden" id="receiver" name="receiver" class="form-control" value="${sessionScope.user.getEmail()}">
+
+							<textarea name="message">Enter your message here...</textarea>
+							<button class="btn btn-lg btn-primary btn-block" type="submit" id="Registrate">Send</button>
+						</form>
+							
+					</div>
+				</div>
+			</div>
+		</div>            
   
          
            <footer>
@@ -251,6 +274,9 @@
 
         
     <script>
+	$(document).on('click', '#contact', function () {
+		$("#SendMessageModal").modal("show");
+	});
 		
     </script>
         
