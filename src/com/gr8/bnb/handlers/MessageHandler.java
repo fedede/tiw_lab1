@@ -2,9 +2,11 @@ package com.gr8.bnb.handlers;
 
 import java.io.IOException;
 
+import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.UserTransaction;
 
 import java.util.Date;
 
@@ -16,6 +18,13 @@ import com.gr8.bnb.models.User;
 public class MessageHandler implements RequestHandler {
 	private static final String MESSAGES_PAGE  = "/messages";
 	
+	private EntityManager em;
+	private UserTransaction ut;
+	
+	public MessageHandler(EntityManager em, UserTransaction ut){
+		this.em = em;
+		this.ut = ut;
+	}
 	public String handleGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		return null;
 	}

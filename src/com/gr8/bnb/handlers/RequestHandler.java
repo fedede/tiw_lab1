@@ -16,14 +16,16 @@ package com.gr8.bnb.handlers;
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
+import javax.transaction.NotSupportedException;
+import javax.transaction.SystemException;
 
 
 public interface RequestHandler {
 	String handleGet(HttpServletRequest request,
 			HttpServletResponse response)
-					throws ServletException, IOException;
+					throws ServletException, IOException, NotSupportedException, SystemException;
 	
 	String handlePost(HttpServletRequest request,
 			HttpServletResponse response)
-					throws ServletException, IOException;
+					throws ServletException, IOException, NotSupportedException, SystemException;
 }

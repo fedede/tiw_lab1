@@ -5,12 +5,15 @@ import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.UserTransaction;
 
 import com.gr8.bnb.models.House;
+import model.Home;
 
 /**
  * Servlet implementation class searchServlet
@@ -18,6 +21,14 @@ import com.gr8.bnb.models.House;
 public class ResultsHandler implements  RequestHandler {
 
 	private final String RESULTS_PAGE = "/results.jsp";
+	
+	private EntityManager em;
+	private UserTransaction ut;
+	
+	public ResultsHandler(EntityManager em, UserTransaction ut){
+		this.em = em;
+		this.ut = ut;
+	}
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)

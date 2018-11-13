@@ -2,12 +2,18 @@ package com.gr8.bnb.controllers;
 
 
 import java.io.IOException;
+
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
+import javax.transaction.NotSupportedException;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
 
 import com.gr8.bnb.handlers.RequestHandler;
 
@@ -21,6 +27,12 @@ import java.util.HashMap;
 
 public class FrontControllerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	@PersistenceContext(unitName="TIWbnb")
+	private EntityManager em;
+	
+	@Resource
+	private UserTransaction ut;
 
 	private ArrayList<String> noAuthPost = new ArrayList<String>();
 	private ArrayList<String> noAuthGet  = new ArrayList<String>();
@@ -41,14 +53,14 @@ public class FrontControllerServlet extends HttpServlet {
 	
 	
 	public void init() throws ServletException {
-		handlerHash.put(LOGIN_PAGE, new com.gr8.bnb.handlers.LoginHandler());
-		handlerHash.put(LOGOUT_PAGE, new com.gr8.bnb.handlers.LogoutHandler());
-		handlerHash.put(SIGNUP_PAGE, new com.gr8.bnb.handlers.SignupHandler());
-		handlerHash.put(HOUSES_PAGE, new com.gr8.bnb.handlers.HouseHandler());
-		handlerHash.put(MESSAGES_PAGE, new com.gr8.bnb.handlers.MessagesServlet());
-		handlerHash.put(MESSAGE_PAGE, new com.gr8.bnb.handlers.MessageHandler());
-		handlerHash.put(RESULTS_PAGE, new com.gr8.bnb.handlers.ResultsHandler());
-		handlerHash.put(EDITPROFILE_PAGE, new com.gr8.bnb.handlers.EditProfileHandler());
+		handlerHash.put(LOGIN_PAGE, new com.gr8.bnb.handlers.LoginHandler(em, ut));
+		handlerHash.put(LOGOUT_PAGE, new com.gr8.bnb.handlers.LogoutHandler(em, ut));
+		handlerHash.put(SIGNUP_PAGE, new com.gr8.bnb.handlers.SignupHandler(em, ut));
+		handlerHash.put(HOUSES_PAGE, new com.gr8.bnb.handlers.HouseHandler(em, ut));
+		handlerHash.put(MESSAGES_PAGE, new com.gr8.bnb.handlers.MessagesServlet(em, ut));
+		handlerHash.put(MESSAGE_PAGE, new com.gr8.bnb.handlers.MessageHandler(em, ut));
+		handlerHash.put(RESULTS_PAGE, new com.gr8.bnb.handlers.ResultsHandler(em, ut));
+		handlerHash.put(EDITPROFILE_PAGE, new com.gr8.bnb.handlers.EditProfileHandler(em, ut));
 		
 		noAuthGet.add(LOGIN_PAGE);
 		noAuthGet.add(SIGNUP_PAGE);
@@ -63,20 +75,32 @@ public class FrontControllerServlet extends HttpServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String viewName = getView(request, response);
+		String viewName = "";
+		try {
+			viewName = getView(request, response);
+		} catch (NotSupportedException | SystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		request.getServletContext().getRequestDispatcher(viewName).forward(request, response); 
 	}
 	
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String viewName = getView(request, response);
+		String viewName = "";
+		try {
+			viewName = getView(request, response);
+		} catch (NotSupportedException | SystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		request.getServletContext().getRequestDispatcher(viewName).forward(request, response); 
 	}
 	
 	private String getView(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+			throws ServletException, IOException, NotSupportedException, SystemException {
 		String viewName;
 		
 		String path = request.getServletPath();
