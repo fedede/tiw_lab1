@@ -13,7 +13,8 @@
 					<li ><a href="houses">Apartments</a></li>
 					<c:choose>
 						<c:when test="${sessionScope.authenticated == true}">
-							<li ><a href="messages">Messages</a></li>                              
+							<li ><a href="messages">Messages</a></li>
+							<li><a href="#" id="housePub">Publish House</a></li>                              
 							<li><a href="#" id="userId"><c:out value="${sessionScope.user.name}"/> Profile</a></li> 
 							<li><a href="#" id="logout">Logout</a></li> 
 						</c:when>

@@ -11,8 +11,8 @@ import javax.servlet.http.HttpSession;
 import javax.transaction.UserTransaction;
 
 // Models
-import com.gr8.bnb.models.Message;
-import com.gr8.bnb.models.User;
+import model.Message;
+import model.User;
 
 
 public class MessagesServlet implements RequestHandler {
@@ -30,7 +30,7 @@ public class MessagesServlet implements RequestHandler {
 		HttpSession session = request.getSession();
 		
 		User receiver = (User) session.getAttribute("user");
-		ArrayList<Message> messages = Message.findAll(receiver);
+		ArrayList<Message> messages = null; //Messa
 			
 		request.setAttribute("messages", messages);
 		return MESSAGES_JSP;

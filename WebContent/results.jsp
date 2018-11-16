@@ -102,7 +102,7 @@
 							<div class="col-md-4 col-sm-6 fh5co-tours animate-box"
 								data-animate-effect="fadeIn">
 								<div href="#">
-									<img src="images/place-1.jpg"
+									<img src=${house.getImg()}
 										alt="Free HTML5 Website Template by FreeHTML5.co"
 										class="img-responsive">
 									<div class="desc">

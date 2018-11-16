@@ -49,6 +49,8 @@ public class FrontControllerServlet extends HttpServlet {
 	private final String MESSAGE_PAGE = "/message";
 	private final String RESULTS_PAGE = "/results";
 	private final String EDITPROFILE_PAGE = "/editprofile";
+	private final String PUBLISHHOUSE_PAGE = "/publishHouse";
+	
 
 	
 	
@@ -61,6 +63,7 @@ public class FrontControllerServlet extends HttpServlet {
 		handlerHash.put(MESSAGE_PAGE, new com.gr8.bnb.handlers.MessageHandler(em, ut));
 		handlerHash.put(RESULTS_PAGE, new com.gr8.bnb.handlers.ResultsHandler(em, ut));
 		handlerHash.put(EDITPROFILE_PAGE, new com.gr8.bnb.handlers.EditProfileHandler(em, ut));
+		handlerHash.put(PUBLISHHOUSE_PAGE, new com.gr8.bnb.handlers.HousePublishHandler(em, ut));
 		
 		noAuthGet.add(LOGIN_PAGE);
 		noAuthGet.add(SIGNUP_PAGE);

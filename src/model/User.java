@@ -173,5 +173,9 @@ public class User implements Serializable {
 
 		return transaction;
 	}
-
+/*
+	@Modifying
+	@Query("UPDATE User u SET u.name = ?1, u.surname = ?2, u.password = ?3 WHERE u.email = ?4")
+	int updateUser(String name, String surname, String password, String email);
+*/	
 }

@@ -64,7 +64,6 @@ public class SignupHandler implements RequestHandler {
 			ut.begin();
 			TypedQuery<User> tq = em.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class);
 			tq.setParameter("email", email);
-			System.out.println("HERE");
 			List<User> res = tq.getResultList();
 			if( res.isEmpty() ){
 				session.setAttribute("user", user);
