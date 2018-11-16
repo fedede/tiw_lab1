@@ -24,7 +24,7 @@
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>FrontControllerServlet</servlet-name>
-    <url-pattern>/houses</url-pattern>
+    <url-pattern>/house</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>FrontControllerServlet</servlet-name>

@@ -44,7 +44,7 @@ public class FrontControllerServlet extends HttpServlet {
 	private final String LOGIN_PAGE = "/login";
 	private final String LOGOUT_PAGE = "/logout";
 	private final String SIGNUP_PAGE = "/signup";
-	private final String HOUSES_PAGE = "/houses";
+	private final String HOUSES_PAGE = "/house";
 	private final String MESSAGES_PAGE = "/messages";
 	private final String MESSAGE_PAGE = "/message";
 	private final String RESULTS_PAGE = "/results";

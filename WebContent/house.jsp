@@ -95,7 +95,7 @@
                             <tbody>
                                 <tr>                                
                                     <th scope="row">Host:</th>
-                                    <td><span class="host">Pepe</span></td>
+                                    <td><span class="host">${requestScope.foundHouse.getUser().getName()}</span></td>
                                 </tr>
                                 
                                 <tr>                                
@@ -121,7 +121,7 @@
                                                                         
                     </div>
 					<div class="col-md-6 animate-box">
-						<img class="img-responsive" src="images/cover_bg_2.jpg" alt="travel">
+						<img class="img-responsive" src="${requestScope.foundHouse.getImg()}" alt="travel">
 					</div>
 				</div>
 			</div>
@@ -138,7 +138,7 @@
 					</div>
 					<div class="modal-body">
 						<form class="form-registro" action="message" method="post" id="message-form">
-							<input type="hidden" id="owner" name="owner" class="form-control" value="${requestScope.foundHouse.getOwner().getEmail()}">
+							<input type="hidden" id="owner" name="owner" class="form-control" value="${requestScope.foundHouse.getUser().getEmail()}">
 							<input type="hidden" id="receiver" name="receiver" class="form-control" value="${sessionScope.user.getEmail()}">
 
 							<textarea name="message">Enter your message here...</textarea>
