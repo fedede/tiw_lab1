@@ -1,7 +1,18 @@
 package model;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+
+import javax.jms.ConnectionFactory;
 import javax.persistence.*;
+import javax.servlet.ServletException;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
+
 import java.util.Date;
 import java.util.List;
 
@@ -12,9 +23,12 @@ import java.util.List;
  */
 @Entity
 @Table(name="homes")
-@NamedQuery(name="Home.findAll", query="SELECT h FROM Home h")
-
-
+@NamedQueries({
+	@NamedQuery(name="Home.findAll", 
+			query="SELECT h FROM Home h"),
+	@NamedQuery(name="Home.findById",
+			query="SELECT h FROM Home h WHERE h.id = :id"),
+})
 public class Home implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -180,10 +194,67 @@ public class Home implements Serializable {
 
 		return transaction;
 	}
-	/*
-	public  getResultHomes(){
-		this.
-	}
-	*/
+	
+	public static Home create(EntityManager em, UserTransaction ut,String name, User owner, String city, String fullDesc, 
+			String shortDesc,int guestNum, boolean isPrivate, String imageUrl, int price, 
+			Date initDate, Date endDate) {
+		Home home = new Home();
+		home.setName(name);
+		home.setCity(city.toUpperCase());
+		home.setFullDesc(fullDesc);
+		home.setShortDesc(shortDesc);
+		home.setGuestNum(guestNum);
+		//home.setTransactions(new ArrayList<Transaction>());
+		if(isPrivate){
+			home.setIsPrivate(new byte[]{0});
+		}else{
+			home.setIsPrivate(new byte[]{1});
+		}
+		home.setImg(imageUrl);
+		home.setPrice(price);
+		home.setInitDate(initDate);
+		home.setEndDate(endDate);
+		home.setUser(owner);
 
+		try {
+			ut.begin();
+			em.persist(home);
+			ut.commit();
+		} catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException| HeuristicRollbackException | SystemException | NotSupportedException e) {
+			return null;
+		}
+		return home;
+	}
+
+	private static List<Home> _findBy(UserTransaction ut,EntityManager em, String namedQuery, Object... parameters) throws ServletException {
+		List<Home> homes = null;
+		if (parameters.length % 2 != 0 ){
+			throw new ServletException(
+					"Home._findBy received wrong number of parameters. "
+					+ "Every parameter shall contain a value [paramName, "
+					+ "paramValue, paramName2, paramValue2....,paramNameN, "
+					+ "paramValueN]"
+			);
+		}
+		try { 
+			ut.begin();
+			TypedQuery<Home> tq = em.createNamedQuery(namedQuery, Home.class);
+			for (int i = 0; i < parameters.length; i+=2) {
+				tq.setParameter((String)parameters[i], parameters[i+1]);
+			}
+			homes =	tq.getResultList(); 
+			ut.commit();
+		} catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException
+				| HeuristicRollbackException | SystemException | NotSupportedException e) {
+			return null;
+		}
+		return homes;
+	}
+	
+	public static Home findById(UserTransaction ut, EntityManager em, int id) throws ServletException{
+		List<Home> homes = Home._findBy(ut, em, "Home.findById", "id", id);
+		if (homes.isEmpty())
+			return null;
+		return homes.get(0);
+	}
 }
