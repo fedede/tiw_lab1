@@ -51,9 +51,9 @@ public class LoginHandler implements RequestHandler {
 		tq.setParameter("email", email);
 		tq.setParameter("pass", password);
 		List<User> res = tq.getResultList();
-		User user = res.get(0);
 		
-		if (user != null){
+		if ( !res.isEmpty()){
+			User user = res.get(0);
 			/* set the user and mark the session as authenticate */
 			session.setAttribute("user", user);
 			session.setAttribute("authenticated", true);
