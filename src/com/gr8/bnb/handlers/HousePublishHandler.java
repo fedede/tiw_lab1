@@ -137,12 +137,6 @@ public class HousePublishHandler implements RequestHandler {
 			User sessionUser = (User) session.getAttribute("user");
 			home.setUser(sessionUser);
 			ut.begin();
-			/*
-			boolean x = true;
-			if(x){
-				throw new ServletException("ID: " + home.getId());
-			}
-			*/
 			em.persist(home);
 			try {
 				ut.commit();

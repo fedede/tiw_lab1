@@ -100,7 +100,7 @@
 									<div class="tab-content">
 										<div role="tabpanel" class="tab-pane active" id="hotels">
 									 		<div class="row">
-									 			<form action ="results" method = "POST">
+									 			<form action ="results" method = "GET">
 													<div class="col-xxs-12 col-xs-12 mt">
 														<div class="input-field">
 															<label for="from">City:</label>
