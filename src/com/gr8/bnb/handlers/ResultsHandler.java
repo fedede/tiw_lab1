@@ -32,15 +32,7 @@ public class ResultsHandler implements  RequestHandler {
 		this.em = em;
 		this.ut = ut;
 	}
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	public String handleGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
 
-		return null;
-	}
 
 	/**
 	 * @throws SystemException 
@@ -48,7 +40,7 @@ public class ResultsHandler implements  RequestHandler {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	public String handlePost(HttpServletRequest request, HttpServletResponse response)
+	public String handleGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, NotSupportedException, SystemException {
 		
 		SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
@@ -150,4 +142,13 @@ public class ResultsHandler implements  RequestHandler {
 		return RESULTS_PAGE;
 	}
 
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	public String handlePost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		return null;
+	}
 }

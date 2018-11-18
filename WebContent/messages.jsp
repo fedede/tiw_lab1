@@ -106,7 +106,7 @@
 									<tbody>
 										<c:forEach items="${requestScope.messages}" var="message">
 											<c:choose>
-												<c:when test="${message.isRead()}">
+												<c:when test='${message.getBooleanProperty("isRead")}'>
 													<tr data-status="leido" class="leido">
 												</c:when>
 												<c:otherwise>
@@ -121,14 +121,14 @@
 												<td>
 													<div class="media">
 														<h4 class="title">
-															<c:out value="${message.getSender().getName()}"/>
+															<c:out value='${message.getStringProperty("senderEmail")}'/>
 														</h4>
 													</div>
 												</td>                                        
 												<td>      
 													<div class="media">
-														<p class="summary"><c:out value="${message.getMessage()}"/></p>
-														<p class="meta"><c:out value="${message.getReceivedDate().toString()}"/></p>                                                
+														<p class="summary"><c:out value="${message.getText()}"/></p>
+														<p class="meta"><c:out value='${message.getObjectProperty("sendDate")}'/></p>                                                
 													</div>
 												</td>
 											</tr>

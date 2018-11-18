@@ -4,6 +4,8 @@ package com.gr8.bnb.controllers;
 import java.io.IOException;
 
 import javax.annotation.Resource;
+import javax.jms.ConnectionFactory;
+import javax.jms.Queue;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.servlet.ServletException;
@@ -16,6 +18,7 @@ import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
 import com.gr8.bnb.handlers.RequestHandler;
+import com.gr8.bnb.helpers.MessageManager;
 
 import java.util.Map;
 import java.util.ArrayList;
@@ -33,13 +36,19 @@ public class FrontControllerServlet extends HttpServlet {
 	
 	@Resource
 	private UserTransaction ut;
+	
+	@Resource(mappedName="tiwbnbcf")
+	private ConnectionFactory cf;
+	
+	@Resource(mappedName="tiwbnbqueue")
+	private Queue queue;
 
 	private ArrayList<String> noAuthPost = new ArrayList<String>();
 	private ArrayList<String> noAuthGet  = new ArrayList<String>();
 	
 	private Map<String, RequestHandler> handlerHash  = new HashMap<String, RequestHandler>();
 	
-	private final String HOME_JSP = "index.jsp";
+	private final String HOME_JSP = "/index.jsp";
 	
 	private final String LOGIN_PAGE = "/login";
 	private final String LOGOUT_PAGE = "/logout";
@@ -55,12 +64,15 @@ public class FrontControllerServlet extends HttpServlet {
 	
 	
 	public void init() throws ServletException {
+		/* Create helper for sending and receiving messages */
+		MessageManager messageManager = new MessageManager(cf, queue);
+		
 		handlerHash.put(LOGIN_PAGE, new com.gr8.bnb.handlers.LoginHandler(em, ut));
 		handlerHash.put(LOGOUT_PAGE, new com.gr8.bnb.handlers.LogoutHandler(em, ut));
 		handlerHash.put(SIGNUP_PAGE, new com.gr8.bnb.handlers.SignupHandler(em, ut));
 		handlerHash.put(HOUSES_PAGE, new com.gr8.bnb.handlers.HouseHandler(em, ut));
-		handlerHash.put(MESSAGES_PAGE, new com.gr8.bnb.handlers.MessagesServlet(em, ut));
-		handlerHash.put(MESSAGE_PAGE, new com.gr8.bnb.handlers.MessageHandler(em, ut));
+		handlerHash.put(MESSAGES_PAGE, new com.gr8.bnb.handlers.MessagesHandler(em, ut, messageManager));
+		handlerHash.put(MESSAGE_PAGE, new com.gr8.bnb.handlers.MessageHandler(em, ut, messageManager));
 		handlerHash.put(RESULTS_PAGE, new com.gr8.bnb.handlers.ResultsHandler(em, ut));
 		handlerHash.put(EDITPROFILE_PAGE, new com.gr8.bnb.handlers.EditProfileHandler(em, ut));
 		handlerHash.put(PUBLISHHOUSE_PAGE, new com.gr8.bnb.handlers.HousePublishHandler(em, ut));
