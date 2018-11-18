@@ -111,7 +111,7 @@ public class HousePublishHandler implements RequestHandler {
 
 		Date initDate;
 		Date endDate;
-		SimpleDateFormat format = new SimpleDateFormat("dd/MM/YYY");
+		SimpleDateFormat format = new SimpleDateFormat("MM/dd/YYYY");
 		try{
 			initDate = (Date) format.parse(sInitDate);
 			endDate = (Date) format.parse(sEndDate);

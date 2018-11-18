@@ -146,7 +146,7 @@
 														</section>
 													</div>
 	                                            	
-													<div class="col-xxs-12 col-xs-6 mt">
+													<div class="col-xs-12 mt">
 														<section>
 															<label for="class">Adults:</label>
 															<select class="cs-select cs-skin-border" id="adults" name="adults">
@@ -158,18 +158,7 @@
 															</select>
 														</section>
 													</div>
-													<div class="col-xxs-12 col-xs-6 mt">
-														<section>
-															<label for="class">Children:</label>
-															<select class="cs-select cs-skin-border" name="children">
-																<option value="" disabled selected>0</option>
-																<option value="1">1</option>
-																<option value="2">2</option>
-																<option value="3">3</option>
-																<option value="4">4</option>
-															</select>
-														</section>
-													</div>
+													
 													<div class="col-xs-12">
 														<input type="submit" class="btn btn-primary btn-block" value="Find">
 													</div>

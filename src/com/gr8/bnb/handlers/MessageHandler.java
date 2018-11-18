@@ -36,7 +36,7 @@ public class MessageHandler implements RequestHandler {
 		String message = (String) request.getParameter("message");
 		String ownerEmail = request.getParameter("owner");
 		String senderEmail = request.getParameter("receiver");
-		
+
 		User owner = User.findByEmail(ut, em, ownerEmail);
 		User sender = User.findByEmail(ut, em, senderEmail);
 		

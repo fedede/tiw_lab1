@@ -43,7 +43,7 @@ public class ResultsHandler implements  RequestHandler {
 	public String handleGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, NotSupportedException, SystemException {
 		
-		SimpleDateFormat format = new SimpleDateFormat("dd/MM/YYY");
+		SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
 		String page = request.getParameter("page");
 		int pageNum = (page == null) ? 0 : Integer.parseInt(page);
 		
