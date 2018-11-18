@@ -55,8 +55,8 @@ public class HousePublishHandler implements RequestHandler {
 		String sGuestNum  = request.getParameter("inputGuestnumber");
 		String photo = request.getParameter("inputHousephoto");
 		String city = request.getParameter("inputHousecity");
-		String initDate = request.getParameter("inputHousedatestart");
-		String endDate = request.getParameter("inputHousedateend");
+		String sInitDate = request.getParameter("inputHousedatestart");
+		String sEndDate = request.getParameter("inputHousedateend");
 		
 		
 		HttpSession session = request.getSession();
@@ -81,9 +81,9 @@ public class HousePublishHandler implements RequestHandler {
 			errorMessage = "Error in city";
 		}else if(sPrice == null || sPrice.isEmpty()){
 			errorMessage = "Error in price1";
-		}else if(initDate == null || initDate.isEmpty()){
+		}else if(sInitDate == null || sInitDate.isEmpty()){
 			errorMessage = "Error in start date";
-		}else if(endDate == null || endDate.isEmpty()){
+		}else if(sEndDate == null || sEndDate.isEmpty()){
 			errorMessage = "Error in end date";
 		}
 		
@@ -93,6 +93,7 @@ public class HousePublishHandler implements RequestHandler {
 		}catch(Exception e){
 			guestNum = 0;
 		}
+
 		if(guestNum < 0 || guestNum > 4){
 			errorMessage = "Error in guest number2";
 		}
@@ -103,50 +104,35 @@ public class HousePublishHandler implements RequestHandler {
 		}catch(Exception e){
 			price = -1;
 		}
+		
 		if(price < 0){
 			errorMessage = "Error in price2" + sPrice + "|| " + price;
+		}
+
+		Date initDate;
+		Date endDate;
+		SimpleDateFormat format = new SimpleDateFormat("dd/MM/YYY");
+		try{
+			initDate = (Date) format.parse(sInitDate);
+			endDate = (Date) format.parse(sEndDate);
+		
+		}catch(java.text.ParseException e){
+			errorMessage = "Error with dates";
+			throw new ServletException("Date: "+ e.getMessage());
 		}
 		
 		/* If no error message try to create the user */
 		if (errorMessage == null) {
+			User owner = (User) session.getAttribute("user");
 			
-			Home home = new Home();
-			home.setName(houseName);
-			home.setCity(city.toUpperCase());
-			home.setFullDesc(fullDesc);
-			home.setShortDesc(shortDesc);
-			home.setGuestNum(guestNum);
-			//home.setTransactions(new ArrayList<Transaction>());
-			if(type.equals("shared")){
-				home.setIsPrivate(new byte[]{0});
-			}else{
-				home.setIsPrivate(new byte[]{1});
+			boolean isPrivate = type.equals("shared");
+			Home home = Home.create(em, ut, houseName, owner, city, fullDesc,
+					shortDesc, guestNum, isPrivate, photo, price, initDate, endDate);
+			
+		
+			if (home == null) {
+				errorMessage = "Could not publish house"; 
 			}
-			home.setImg(photo);
-			home.setPrice(price);
-			SimpleDateFormat format = new SimpleDateFormat("dd/MM/YYY");
-			try{
-				home.setInitDate((Date) format.parse(initDate));
-				home.setEndDate((Date) format.parse(endDate));
-			
-			}catch(java.text.ParseException e){
-				errorMessage = "Error with dates";
-				throw new ServletException("Date: "+ e.getMessage());
-			}
-
-			User sessionUser = (User) session.getAttribute("user");
-			home.setUser(sessionUser);
-			ut.begin();
-			em.persist(home);
-			try {
-				ut.commit();
-			} catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException| HeuristicRollbackException e) {
-				// TODO Auto-generated catch block
-				errorMessage = "Unknown error creating your account. Try again.";
-				e.printStackTrace();
-				throw new ServletException("Commit: " + e.getMessage());
-			}				
-			
 		}
 		
 		/* If error message send message to the view */

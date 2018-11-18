@@ -81,12 +81,6 @@ public class ResultsHandler implements  RequestHandler {
 			maxPrice = Integer.MAX_VALUE;
 		}
 				
-		/*
-		int type = -1;
-		int numAdults = -1;
-		int numChildren = -1;
-		
-		*/
 		byte []isPrivate = sType.equals("shared") ? new byte[]{0} : new byte[]{1}; 
 		int guestNum = Integer.parseInt(sNumAdults);
 		ut.begin();
@@ -109,35 +103,6 @@ public class ResultsHandler implements  RequestHandler {
 				.setFirstResult(pageNum * MAX_HOUSES_PER_PAGE)
 				.setMaxResults(MAX_HOUSES_PER_PAGE)
 				.getResultList();
-				/*
-				em.createQuery(
-				
-				, Home.class)
-				.getResultList();
-				*/
-		/*
-		try {
-			House.create(
-					"test house",
-					"full description",
-					"shortdesc",
-					"madrid",
-					true, 
-					2, 
-					40,
-					(Date) format.parse("13-05-2018"),
-					(Date) format.parse("13-07-2018"),
-					"test@tmail.com", 
-					"img.png");
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
-		//ArrayList houseList = (ArrayList) request.getAttribute("houses");
-		//if (houseList == null){
-		request.setAttribute("houses", homeList);
-		//}
 
 		return RESULTS_PAGE;
 	}

@@ -47,54 +47,22 @@ public class EditProfileHandler implements RequestHandler {
 
 		HttpSession session = request.getSession();
 		User sesionUser = (User) session.getAttribute("user");
-		ut.begin();
-		TypedQuery<User> tq = em.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class);
-		tq.setParameter("email", sesionUser.getEmail());
-		List<User> res = tq.getResultList();
-		User dbUser = res.get(0);
+		User dbUser = User.findByEmail(ut, em, sesionUser.getEmail());
 		
 		if( dbUser != null ){
-			Query uq = em.createQuery("UPDATE User u SET u.name = :name, u.surname = :sname, u.password = :pass WHERE u.email = :email");
-			uq.setParameter("name", name);
-			uq.setParameter("sname", surname);
-			uq.setParameter("pass", password);
-			uq.setParameter("email", dbUser.getEmail());
+			boolean updated = User.updateByEmail(ut, em, dbUser.getEmail(), name, surname, password);
 			
-			uq.executeUpdate();
-			try {
-				ut.commit();
+			if (updated) {
 				sesionUser.setName(name);
 				sesionUser.setSurname(surname);
 				sesionUser.setPassword(password);
-			} catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException
-					| HeuristicRollbackException e) {
-				// TODO Auto-generated catch block
-				errorMessage = e.getMessage();
-				e.printStackTrace();
-			}
 
-			session.setAttribute("user", sesionUser);
-			session.setAttribute("authenticated", true);
-		
-		}
-		
-		/* Check that a user is associated with this session */
-		/*
-		if (sesionUser != null) {
-			sesionUser.setName(name);
-			sesionUser.setSurname(surname);
-			sesionUser.setPassword(password);
-			
-			session.setAttribute("user", sesionUser);
-
-			/* Check if updated successfully on the database */
-			/*
-			if (!user.update()) {
+				session.setAttribute("user", sesionUser);
+				session.setAttribute("authenticated", true);
+			} else {
 				errorMessage = "Cannot update user on the database";
 			}
-			
 		}
-			 */
 		
 		/* If error message send message to the view */
 		if (errorMessage != null) {

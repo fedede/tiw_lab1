@@ -2,15 +2,6 @@ package com.gr8.bnb.handlers;
 
 import java.io.IOException;
 
-import javax.annotation.Resource;
-import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
-import javax.jms.JMSException;
-import javax.jms.MessageProducer;
-import javax.jms.Queue;
-import javax.jms.Session;
-import javax.jms.TextMessage;
-import javax.jms.TopicSession;
 import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -18,8 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.UserTransaction;
 
 import com.gr8.bnb.helpers.MessageManager;
-
-import java.util.Date;
 
 // Models
 import model.User;
@@ -60,7 +49,10 @@ public class MessageHandler implements RequestHandler {
 			messageManager.send(senderEmail, ownerEmail, message);
 		}
 		
+		if (errorMessage == null) {
+			request.setAttribute("errorMessage", errorMessage);
+		}
+		
 		return MESSAGES_PAGE;
 	}
-
 }

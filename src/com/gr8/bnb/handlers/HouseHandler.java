@@ -36,11 +36,8 @@ public class HouseHandler implements RequestHandler {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	public String handleGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, NotSupportedException, SystemException {
-		ut.begin();
 		int id = Integer.parseInt(request.getParameter("houseId"));
-		TypedQuery<Home> tq = em.createQuery("SELECT h FROM Home h WHERE h.id = :id", Home.class);
-		tq.setParameter("id", id);
-		Home home = tq.getSingleResult();
+		Home home = Home.findById(ut, em, id);
 		if (home != null) {
 			request.setAttribute("foundHouse", home);
 		}

@@ -46,12 +46,11 @@ public class LoginHandler implements RequestHandler {
 
 		HttpSession session = request.getSession();
 		
-		ut.begin();
-		TypedQuery<User> tq = em.createQuery("SELECT u FROM User u WHERE u.email = :email AND u.password = :pass", User.class);
-		tq.setParameter("email", email);
-		tq.setParameter("pass", password);
-		List<User> res = tq.getResultList();
-		User user = res.get(0);
+		User user = User.findByEmailAndPass(ut, em, email, password);
+		
+		if (user == null) {
+			errorMessage = "Cannot find this user";
+		}
 		
 		if (user != null){
 			/* set the user and mark the session as authenticate */

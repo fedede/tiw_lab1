@@ -54,33 +54,13 @@ public class SignupHandler implements RequestHandler {
 
 		/* If no error message try to create the user */
 		if (errorMessage == null) {
-			User user = new User();
-			user.setEmail(email);
-			user.setName(name);
-			user.setSurname(surname);
-			user.setPassword(password);
-			user.setIsAdmin(new byte[1]);
-			//.create(name, surname, email, password);
-			ut.begin();
-			TypedQuery<User> tq = em.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class);
-			tq.setParameter("email", email);
-			List<User> res = tq.getResultList();
-			if( res.isEmpty() ){
+			User user = User.create(ut, em, email, name, surname, password);
+			if (user != null) { 
 				session.setAttribute("user", user);
 				session.setAttribute("authenticated", true);
-				em.persist(user);
-				try {
-					ut.commit();
-				} catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException
-						| HeuristicRollbackException e) {
-					// TODO Auto-generated catch block
-					errorMessage = "Unknown error creating your account. Try again.";
-					e.printStackTrace();
-				}
-			}else {				
-				errorMessage = "This email account is already registered";
+			} else {
+				errorMessage = "Could not create user";
 			}
-			
 		}
 
 		/* If error message send message to the view */
