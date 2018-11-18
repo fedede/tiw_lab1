@@ -2,6 +2,13 @@ package model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
+
 import java.util.List;
 
 
@@ -11,7 +18,12 @@ import java.util.List;
  */
 @Entity
 @Table(name="users")
-@NamedQuery(name="User.findAll", query="SELECT u FROM User u")
+@NamedQueries({
+	@NamedQuery(name="User.findAll", 
+			query="SELECT u FROM User u"),
+	@NamedQuery(name="User.findByEmail", 
+			query="SELECT u FROM User u WHERE u.email = :email"),
+})
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -172,6 +184,26 @@ public class User implements Serializable {
 		transaction.setUser(null);
 
 		return transaction;
+	}
+	
+	public static User findByEmail(UserTransaction ut,EntityManager em, String email) {
+		try {
+			ut.begin();
+		} catch (NotSupportedException | SystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		User u = em.createNamedQuery("User.findByEmail", User.class)
+				.setParameter("email", email)
+				.getSingleResult();
+		try {
+			ut.commit();
+		} catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException
+				| HeuristicRollbackException | SystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return u;
 	}
 /*
 	@Modifying
