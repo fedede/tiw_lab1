@@ -2,6 +2,7 @@ package model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import javax.servlet.ServletException;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
@@ -23,6 +24,10 @@ import java.util.List;
 			query="SELECT u FROM User u"),
 	@NamedQuery(name="User.findByEmail", 
 			query="SELECT u FROM User u WHERE u.email = :email"),
+	@NamedQuery(name="User.findByEmailAndPass",
+			query="SELECT u FROM User u WHERE u.email = :email AND u.password = :password"),
+	@NamedQuery(name="User.updateByEmail",
+			query="UPDATE User u SET u.name = :name, u.surname = :surname, u.password = :password WHERE u.email = :email"),
 })
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -186,28 +191,87 @@ public class User implements Serializable {
 		return transaction;
 	}
 	
-	public static User findByEmail(UserTransaction ut,EntityManager em, String email) {
-		try {
-			ut.begin();
-		} catch (NotSupportedException | SystemException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public static User create(UserTransaction ut, EntityManager em, String email, String name, String surname, String password) throws ServletException {
+		boolean userExists = User.findByEmail(ut, em, email) != null;
+		
+		User user = null;
+		if (!userExists) {
+			user = new User();
+			user.setEmail(email);
+			user.setName(name);
+			user.setSurname(surname);
+			user.setPassword(password);
+			user.setIsAdmin(new byte[1]);
+			
+			try {
+				ut.begin();
+				em.persist(user);
+				ut.commit();
+			} catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException
+					| HeuristicRollbackException | NotSupportedException | SystemException e) {
+				return null;
+			}
+		}else {				
+			return null;
 		}
-		User u = em.createNamedQuery("User.findByEmail", User.class)
-				.setParameter("email", email)
-				.getSingleResult();
-		try {
+		
+		return user;
+	}
+	
+	private static List<User> _findBy(UserTransaction ut,EntityManager em, String namedQuery, String... parameters) throws ServletException {
+		List<User> users = null;
+		if (parameters.length % 2 != 0 ){
+			throw new ServletException(
+					"User._findBy received wrong number of parameters. "
+					+ "Every parameter shall contain a value [paramName, "
+					+ "paramValue, paramName2, paramValue2....,paramNameN, "
+					+ "paramValueN]"
+			);
+		}
+		try { 
+			ut.begin();
+			TypedQuery<User> tq = em.createNamedQuery(namedQuery, User.class);
+			for (int i = 0; i < parameters.length; i+=2) {
+				tq.setParameter(parameters[i], parameters[i+1]);
+			}
+			users =	tq.getResultList(); 
 			ut.commit();
 		} catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException
-				| HeuristicRollbackException | SystemException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+				| HeuristicRollbackException | SystemException | NotSupportedException e) {
+			return null;
 		}
-		return u;
+		return users;
 	}
-/*
-	@Modifying
-	@Query("UPDATE User u SET u.name = ?1, u.surname = ?2, u.password = ?3 WHERE u.email = ?4")
-	int updateUser(String name, String surname, String password, String email);
-*/	
+	
+	public static User findByEmail(UserTransaction ut, EntityManager em, String email) throws ServletException{
+		List<User> users = User._findBy(ut, em, "User.findByEmail", "email", email);
+		if (users.isEmpty())
+			return null;
+		return users.get(0);
+	}
+
+	public static User findByEmailAndPass(UserTransaction ut, EntityManager em, String email, String password) throws ServletException{
+		List<User> users = User._findBy(ut, em, "User.findByEmailAndPass", "email", email, "password", password);
+		if (users.isEmpty())
+			return null;
+		return users.get(0);  
+	}
+	
+	public static boolean updateByEmail(UserTransaction ut, EntityManager em, String email, 
+			String name, String surname, String password) {
+		try {
+			ut.begin();
+			em.createNamedQuery("User.updateByEmail")
+				.setParameter("email", email)
+				.setParameter("name", name)
+				.setParameter("surname", surname)
+				.setParameter("password", password)
+				.executeUpdate();
+			ut.commit();
+		} catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException
+				| HeuristicRollbackException | SystemException | NotSupportedException e) {
+			return false;
+		}
+		return true;
+	}
 }
