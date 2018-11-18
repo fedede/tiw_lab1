@@ -1,6 +1,7 @@
 package com.gr8.bnb.handlers;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -124,7 +125,18 @@ public class HousePublishHandler implements RequestHandler {
 			}
 			home.setImg(photo);
 			home.setPrice(price);
-			SimpleDateFormat format = new SimpleDateFormat("dd/MM/YYY");
+			SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+//			boolean x = true;
+//			if(x){
+//				try {
+//					throw new ServletException("InitDate: " + format.parse(initDate).toString()
+//							+ "\nEndDate: " + format.parse(endDate).toString());
+//				} catch (ParseException e) {
+//					// TODO Auto-generated catch blockssssss
+//					e.printStackTrace();
+//				}
+//				
+//			}
 			try{
 				home.setInitDate((Date) format.parse(initDate));
 				home.setEndDate((Date) format.parse(endDate));
