@@ -37,7 +37,7 @@ CREATE TABLE `homes` (
   `city` varchar(45) NOT NULL,
   `full_desc` text NOT NULL,
   `short_desc` tinytext NOT NULL,
-  `is_private` binary(1) NOT NULL,
+  `is_private` boolean NOT NULL,
   `guest_num` int(11) NOT NULL,
   `img` varchar(45) NOT NULL,
   `price` int(3) NOT NULL,
@@ -97,9 +97,9 @@ DROP TABLE IF EXISTS `transactions`;
 CREATE TABLE `transactions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `guest` varchar(45) NOT NULL,
-  `card_num` int(11) NOT NULL,
+  `card_num` varchar(11) NOT NULL,
   `card_date` date NOT NULL,
-  `cv2` int(11) NOT NULL,
+  `cv2` int(13) NOT NULL,
   `house` int(11) NOT NULL,
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
@@ -133,7 +133,7 @@ CREATE TABLE `users` (
   `surname` varchar(30) NOT NULL,
   `email` varchar(45) NOT NULL,
   `password` varchar(100) NOT NULL,
-  `is_admin` binary(1) NOT NULL,
+  `is_admin` boolean NOT NULL,
   PRIMARY KEY (`email`),
   UNIQUE KEY `email_UNIQUE` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
