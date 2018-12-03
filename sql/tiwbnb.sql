@@ -16,136 +16,130 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Current Database: `tiwbnb`
+-- Table structure for table `house`
 --
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `tiwbnb` /*!40100 DEFAULT CHARACTER SET latin1 */;
-
-USE `tiwbnb`;
-
-GRANT ALL PRIVILEGES ON *.* TO 'tiwbnb'@'localhost'
---
--- Table structure for table `homes`
---
-
-DROP TABLE IF EXISTS `homes`;
+DROP TABLE IF EXISTS `house`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `homes` (
+CREATE TABLE `house` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `city` varchar(45) NOT NULL,
-  `full_desc` text NOT NULL,
-  `short_desc` tinytext NOT NULL,
-  `is_private` binary(1) NOT NULL,
-  `guest_num` int(11) NOT NULL,
-  `img` varchar(45) NOT NULL,
-  `price` int(3) NOT NULL,
-  `init_date` date NOT NULL,
+  `city` varchar(255) NOT NULL,
   `end_date` date NOT NULL,
-  `owner` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `owner_idx` (`owner`),
-  CONSTRAINT `fk_homes_users_email` FOREIGN KEY (`owner`) REFERENCES `users` (`email`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `homes`
---
-
-LOCK TABLES `homes` WRITE;
-/*!40000 ALTER TABLE `homes` DISABLE KEYS */;
-/*!40000 ALTER TABLE `homes` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `messages`
---
-
-DROP TABLE IF EXISTS `messages`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `messages` (
-  `sender` varchar(45) NOT NULL,
-  `receiver` varchar(45) NOT NULL,
-  `time` datetime NOT NULL,
-  `msg` text NOT NULL,
-  PRIMARY KEY (`sender`,`time`,`receiver`),
-  KEY `fk_messages_rec_user_email_idx` (`receiver`),
-  CONSTRAINT `fk_messages_rec_user_email` FOREIGN KEY (`receiver`) REFERENCES `users` (`email`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_messages_sen_user_email` FOREIGN KEY (`sender`) REFERENCES `users` (`email`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `messages`
---
-
-LOCK TABLES `messages` WRITE;
-/*!40000 ALTER TABLE `messages` DISABLE KEYS */;
-/*!40000 ALTER TABLE `messages` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `transactions`
---
-
-DROP TABLE IF EXISTS `transactions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `transactions` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `guest` varchar(45) NOT NULL,
-  `card_num` int(11) NOT NULL,
-  `card_date` date NOT NULL,
-  `cv2` int(11) NOT NULL,
-  `house` int(11) NOT NULL,
+  `full_description` varchar(255) NOT NULL,
+  `image_url` varchar(255) NOT NULL,
+  `max_guests` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `price` float NOT NULL,
+  `shared` tinyint(1) NOT NULL DEFAULT '0',
+  `short_description` varchar(255) NOT NULL,
   `start_date` date NOT NULL,
-  `end_date` date NOT NULL,
-  `status` char(1) NOT NULL,
+  `owner_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_transactions_user_email_idx` (`guest`),
-  KEY `fk_transaction_homes_owner_idx` (`house`),
-  CONSTRAINT `fk_transaction_homes_id` FOREIGN KEY (`house`) REFERENCES `homes` (`id`),
-  CONSTRAINT `fk_transactions_users_email` FOREIGN KEY (`guest`) REFERENCES `users` (`email`) ON UPDATE CASCADE
+  KEY `FK_house_owner_id` (`owner_id`),
+  CONSTRAINT `FK_house_owner_id` FOREIGN KEY (`owner_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `transactions`
+-- Dumping data for table `house`
 --
 
-LOCK TABLES `transactions` WRITE;
-/*!40000 ALTER TABLE `transactions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `transactions` ENABLE KEYS */;
+LOCK TABLES `house` WRITE;
+/*!40000 ALTER TABLE `house` DISABLE KEYS */;
+/*!40000 ALTER TABLE `house` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `users`
+-- Table structure for table `message`
 --
 
-DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS `message`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `users` (
-  `name` varchar(30) NOT NULL,
-  `surname` varchar(30) NOT NULL,
-  `email` varchar(45) NOT NULL,
-  `password` varchar(100) NOT NULL,
-  `is_admin` binary(1) NOT NULL,
-  PRIMARY KEY (`email`),
-  UNIQUE KEY `email_UNIQUE` (`email`)
+CREATE TABLE `message` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `content` text NOT NULL,
+  `send_date` date NOT NULL,
+  `receiver_id` bigint(20) NOT NULL,
+  `sender_id` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_message_receiver_id` (`receiver_id`),
+  KEY `FK_message_sender_id` (`sender_id`),
+  CONSTRAINT `FK_message_receiver_id` FOREIGN KEY (`receiver_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `FK_message_sender_id` FOREIGN KEY (`sender_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `users`
+-- Dumping data for table `message`
 --
 
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+LOCK TABLES `message` WRITE;
+/*!40000 ALTER TABLE `message` DISABLE KEYS */;
+/*!40000 ALTER TABLE `message` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `transaction`
+--
+
+DROP TABLE IF EXISTS `transaction`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `transaction` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `card_date` date NOT NULL,
+  `card_num` varchar(16) NOT NULL,
+  `cv2` int(11) NOT NULL,
+  `end_date` date NOT NULL,
+  `start_date` date NOT NULL,
+  `status` varchar(255) NOT NULL,
+  `house_id` int(11) NOT NULL,
+  `invoiced_id` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_transaction_invoiced_id` (`invoiced_id`),
+  KEY `FK_transaction_house_id` (`house_id`),
+  CONSTRAINT `FK_transaction_house_id` FOREIGN KEY (`house_id`) REFERENCES `house` (`id`),
+  CONSTRAINT `FK_transaction_invoiced_id` FOREIGN KEY (`invoiced_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `transaction`
+--
+
+LOCK TABLES `transaction` WRITE;
+/*!40000 ALTER TABLE `transaction` DISABLE KEYS */;
+/*!40000 ALTER TABLE `transaction` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) NOT NULL,
+  `is_admin` tinyint(1) NOT NULL DEFAULT '0',
+  `name` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `surname` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user`
+--
+
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -157,4 +151,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-09-16 18:23:38
+-- Dump completed on 2018-12-03 22:48:10
