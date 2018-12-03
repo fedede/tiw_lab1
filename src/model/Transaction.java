@@ -10,56 +10,58 @@ import java.util.Date;
  * 
  */
 @Entity
-@Table(name="transactions")
+@Table(name="transaction")
 @NamedQuery(name="Transaction.findAll", query="SELECT t FROM Transaction t")
 public class Transaction implements Serializable {
-	private static final long serialVersionUID = 1L;
-
 	@Id
-	private int id;
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="id")
+	private Long id;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="card_date")
+	@Column(name="card_date", nullable = false)
 	private Date cardDate;
 
-	@Column(name="card_num")
-	private int cardNum;
+	@Column(name="card_num", columnDefinition = "VARCHAR(16)", nullable = false)
+	private String cardNum;
 
+	@Column(name="cv2", nullable = false)
 	private int cv2;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="end_date")
+	@Column(name="end_date", nullable = false)
 	private Date endDate;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="start_date")
+	@Column(name="start_date", nullable = false)
 	private Date startDate;
 
+	@Column(name="status", nullable = false)
 	private String status;
 
 	//bi-directional many-to-one association to Home
 	@ManyToOne
-	@JoinColumn(name="house")
-	private Home home;
+	@JoinColumn(name="house_id", nullable = false)
+	private House house;
 
 	//bi-directional many-to-one association to User
-	@ManyToOne
-	@JoinColumn(name="guest")
-	private User user;
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="invoiced_id", nullable = false)
+	private User invoiced;
 
 	public Transaction() {
 	}
 
-	public int getId() {
-		return this.id;
+	public Long getId() {
+		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
 	public Date getCardDate() {
-		return this.cardDate;
+		return cardDate;
 	}
 
 	public void setCardDate(Date cardDate) {
@@ -67,7 +69,7 @@ public class Transaction implements Serializable {
 	}
 
 	public int getCardNum() {
-		return this.cardNum;
+		return cardNum;
 	}
 
 	public void setCardNum(int cardNum) {
@@ -75,7 +77,7 @@ public class Transaction implements Serializable {
 	}
 
 	public int getCv2() {
-		return this.cv2;
+		return cv2;
 	}
 
 	public void setCv2(int cv2) {
@@ -83,7 +85,7 @@ public class Transaction implements Serializable {
 	}
 
 	public Date getEndDate() {
-		return this.endDate;
+		return endDate;
 	}
 
 	public void setEndDate(Date endDate) {
@@ -91,7 +93,7 @@ public class Transaction implements Serializable {
 	}
 
 	public Date getStartDate() {
-		return this.startDate;
+		return startDate;
 	}
 
 	public void setStartDate(Date startDate) {
@@ -99,27 +101,28 @@ public class Transaction implements Serializable {
 	}
 
 	public String getStatus() {
-		return this.status;
+		return status;
 	}
 
 	public void setStatus(String status) {
 		this.status = status;
 	}
 
-	public Home getHome() {
-		return this.home;
+	public House getHouse() {
+		return house;
 	}
 
-	public void setHome(Home home) {
-		this.home = home;
+	public void setHouse(House house) {
+		this.house = house;
 	}
 
-	public User getUser() {
-		return this.user;
+	public User getInvoiced() {
+		return invoiced;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setInvoiced(User invoiced) {
+		this.invoiced = invoiced;
 	}
-
+	
+	
 }

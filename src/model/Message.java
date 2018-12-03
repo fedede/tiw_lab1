@@ -2,6 +2,7 @@ package model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.Date;
 
 
 /**
@@ -9,60 +10,70 @@ import javax.persistence.*;
  * 
  */
 @Entity
-@Table(name="messages")
+@Table(name="message")
 @NamedQuery(name="Message.findAll", query="SELECT m FROM Message m")
 public class Message implements Serializable {
-	private static final long serialVersionUID = 1L;
 
-	@EmbeddedId
-	private MessagePK id;
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="id")
+	private Long id;
 
-	@Lob
-	private String msg;
+	@Column(columnDefinition = "TEXT", nullable=false, name = "content")
+	private String content;
+	
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="receiver_id", nullable=false)
+	private User receiver;
+	
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="sender_id", nullable=false)
+	private User sender;
 
-	//bi-directional many-to-one association to User
-	@ManyToOne
-	@JoinColumn(name="receiver")
-	private User user1;
-
-	//bi-directional many-to-one association to User
-	@ManyToOne
-	@JoinColumn(name="sender")
-	private User user2;
+	@Temporal(TemporalType.DATE)
+	@Column(name="send_date", nullable=false)
+	private Date sendDate;
 
 	public Message() {
 	}
 
-	public MessagePK getId() {
-		return this.id;
+	public Long getId() {
+		return id;
 	}
 
-	public void setId(MessagePK id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public String getMsg() {
-		return this.msg;
+	public String getContent() {
+		return content;
 	}
 
-	public void setMsg(String msg) {
-		this.msg = msg;
+	public void setContent(String content) {
+		this.content = content;
 	}
 
-	public User getUser1() {
-		return this.user1;
+	public User getReceiver() {
+		return receiver;
 	}
 
-	public void setUser1(User user1) {
-		this.user1 = user1;
+	public void setReceiver(User receiver) {
+		this.receiver = receiver;
 	}
 
-	public User getUser2() {
-		return this.user2;
+	public User getSender() {
+		return sender;
 	}
 
-	public void setUser2(User user2) {
-		this.user2 = user2;
+	public void setSender(User sender) {
+		this.sender = sender;
 	}
 
+	public Date getSendDate() {
+		return sendDate;
+	}
+
+	public void setSendDate(Date sendDate) {
+		this.sendDate = sendDate;
+	}
 }
