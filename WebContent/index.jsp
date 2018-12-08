@@ -462,11 +462,13 @@
 				});
 
 				$(document).on('click', '#logout', function (e) {
+					var currentUrl = window.location.href;
 					$.ajax({
 						type: "POST",
 						url: "${pageContext.request.contextPath}/logout",
 						data: {},
 						success: function (data) {
+							window.location.href = currentUrl;
 							location.reload()
 						}
 					});
