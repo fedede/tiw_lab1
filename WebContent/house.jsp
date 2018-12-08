@@ -138,8 +138,7 @@
 					</div>
 					<div class="modal-body">
 						<form class="form-registro" action="message" method="post" id="message-form">
-							<input type="hidden" id="owner" name="owner" class="form-control" value="${requestScope.foundHouse.getUser().getEmail()}">
-							<input type="hidden" id="receiver" name="receiver" class="form-control" value="${sessionScope.user.getEmail()}">
+							<input type="hidden" id="ownerId" name="owner" class="form-control" value="${requestScope.foundHouse.getUser().getId()}">
 
 							<textarea name="message">Enter your message here...</textarea>
 							<button class="btn btn-lg btn-primary btn-block" type="submit" id="Registrate">Send</button>
