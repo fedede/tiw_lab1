@@ -124,7 +124,7 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `email` varchar(255) NOT NULL,
-  `is_admin` tinyint(1) NOT NULL DEFAULT '0',
+  `admin` tinyint(1) NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `surname` varchar(255) NOT NULL,
