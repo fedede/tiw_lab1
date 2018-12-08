@@ -19,11 +19,12 @@ import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
+import javax.ws.rs.client.Client;
 
 //import com.gr8.bnb.models.User;
 import model.User;
 //import com.gr8.bnb.helpers.InputChecker;
-import model.Home;
+import model.House;
 import model.Transaction;
 
 public class HousePublishHandler implements RequestHandler {
@@ -34,9 +35,8 @@ public class HousePublishHandler implements RequestHandler {
 	private EntityManager em;
 	private UserTransaction ut;
 	
-	public HousePublishHandler(EntityManager em, UserTransaction ut){
-		this.em = em;
-		this.ut = ut;
+	public HousePublishHandler(Client client){
+
 	}
 	
 	public String handleGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, NotSupportedException, SystemException{
@@ -111,7 +111,7 @@ public class HousePublishHandler implements RequestHandler {
 
 		Date initDate;
 		Date endDate;
-		SimpleDateFormat format = new SimpleDateFormat("MM/dd/YYYY");
+		SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
 		try{
 			initDate = (Date) format.parse(sInitDate);
 			endDate = (Date) format.parse(sEndDate);
@@ -126,8 +126,8 @@ public class HousePublishHandler implements RequestHandler {
 			User owner = (User) session.getAttribute("user");
 			
 			boolean isPrivate = type.equals("shared");
-			Home home = Home.create(em, ut, houseName, owner, city, fullDesc,
-					shortDesc, guestNum, isPrivate, photo, price, initDate, endDate);
+			House home = null; //House.create(em, ut, houseName, owner, city, fullDesc,
+					//shortDesc, guestNum, isPrivate, photo, price, initDate, endDate);
 			
 		
 			if (home == null) {

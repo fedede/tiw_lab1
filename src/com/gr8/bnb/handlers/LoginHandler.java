@@ -46,7 +46,7 @@ public class LoginHandler implements RequestHandler {
 
 		HttpSession session = request.getSession();
 		
-		User user = User.findByEmailAndPass(ut, em, email, password);
+		User user = null; //User.findByEmailAndPass(ut, em, email, password);
 		
 		if (user == null) {
 			errorMessage = "Cannot find this user";

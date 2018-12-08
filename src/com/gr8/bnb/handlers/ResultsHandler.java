@@ -16,7 +16,7 @@ import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
 //import com.gr8.bnb.models.House;
-import model.Home;
+import model.House;
 
 /**
  * Servlet implementation class searchServlet
@@ -84,7 +84,7 @@ public class ResultsHandler implements  RequestHandler {
 		byte []isPrivate = sType.equals("shared") ? new byte[]{0} : new byte[]{1}; 
 		int guestNum = Integer.parseInt(sNumAdults);
 		ut.begin();
-		List<Home> homeList = em.createQuery("SELECT h from Home h "
+		List<House> homeList = em.createQuery("SELECT h from Home h "
 				+ "WHERE h.city = :city "
 				+ "AND h.guestNum >= :guestNum "
 				+ "AND h.isPrivate = :isPrivate "
@@ -92,7 +92,7 @@ public class ResultsHandler implements  RequestHandler {
 				+ "AND h.initDate <= :initDate "
 				+ "AND h.endDate > :endDate "
 				+ "ORDER BY h.id ",
-				Home.class)
+				House.class)
 				.setParameter("city", city)
 				.setParameter("guestNum", guestNum)
 				.setParameter("isPrivate", isPrivate)
@@ -104,6 +104,7 @@ public class ResultsHandler implements  RequestHandler {
 				.setMaxResults(MAX_HOUSES_PER_PAGE)
 				.getResultList();
 
+		request.getSession().setAttribute("houses", homeList);
 		return RESULTS_PAGE;
 	}
 

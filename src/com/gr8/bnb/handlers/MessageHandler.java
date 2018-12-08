@@ -2,28 +2,27 @@ package com.gr8.bnb.handlers;
 
 import java.io.IOException;
 
-import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.UserTransaction;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Invocation.Builder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import com.gr8.bnb.helpers.MessageManager;
 
-// Models
 import model.User;
-
 
 public class MessageHandler implements RequestHandler {
 	private static final String MESSAGES_PAGE  = "/messages";
-
-	private MessageManager messageManager;
-	private EntityManager em;
-	private UserTransaction ut;
 	
-	public MessageHandler(EntityManager em, UserTransaction ut, MessageManager messageManager){
-		this.em = em;
-		this.ut = ut;
+	MessageManager messageManager;
+	WebTarget userWebtarget;
+	
+	public MessageHandler(Client client, MessageManager messageManager){
+		this.userWebtarget = client.target("http://localhost:8081/");
 		this.messageManager = messageManager;
 	}
 	
@@ -32,21 +31,26 @@ public class MessageHandler implements RequestHandler {
 	}
 	
 	public String handlePost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String errorMessage = null;
+		
 		/* Get parameters */
 		String message = (String) request.getParameter("message");
-		String ownerEmail = request.getParameter("owner");
-		String senderEmail = request.getParameter("receiver");
+		String ownerId = request.getParameter("ownerId");
+		User sender = (User) request.getSession().getAttribute("user");
 
-		User owner = User.findByEmail(ut, em, ownerEmail);
-		User sender = User.findByEmail(ut, em, senderEmail);
+		/* Get data from the user API. */
+		WebTarget userPath = userWebtarget.path("users").path(ownerId);
+		Builder builder = userPath.request(MediaType.APPLICATION_JSON);
+		Response res = builder.get();
+
+		/* If owner exists then get message data. */
+		if (res.getStatus() == 200) {
+			User owner = res.readEntity(User.class);
 		
-		String errorMessage = null;
-		if (owner == null) {
-			errorMessage = "Invalid receiver email";
-		} else if (sender == null) {
-			errorMessage = "Invalid sender email";
-		} else {
-			messageManager.send(senderEmail, ownerEmail, message);
+			boolean success = messageManager.send(sender, owner, message);
+			if (!success) {
+				errorMessage = "It was not possible to send message";
+			}
 		}
 		
 		if (errorMessage == null) {

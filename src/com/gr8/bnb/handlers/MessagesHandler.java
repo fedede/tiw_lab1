@@ -1,20 +1,15 @@
 package com.gr8.bnb.handlers;
 
 import java.io.IOException;
-import java.util.ArrayList;
-
-import javax.jms.ConnectionFactory;
-import javax.jms.Queue;
-import javax.jms.TextMessage;
-import javax.persistence.EntityManager;
+ 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.transaction.UserTransaction;
 
 import com.gr8.bnb.helpers.MessageManager;
 
+import model.Message;
 // Models
 import model.User;
 
@@ -22,12 +17,8 @@ public class MessagesHandler implements RequestHandler {
 	private static final String MESSAGES_JSP  = "/messages.jsp";
 
 	private MessageManager messageManager;
-	private EntityManager em;
-	private UserTransaction ut;
 	
-	public MessagesHandler(EntityManager em, UserTransaction ut, MessageManager messageManager){
-		this.em = em;
-		this.ut = ut;
+	public MessagesHandler(MessageManager messageManager){
 		this.messageManager = messageManager;
 	}
 	
@@ -36,9 +27,7 @@ public class MessagesHandler implements RequestHandler {
 		
 		User receiver = (User) httpSession.getAttribute("user");
 
-		String receiverEmail = receiver.getEmail();
-		
-		ArrayList<TextMessage> messages = messageManager.receive(receiverEmail);
+		Message[] messages = messageManager.receive(receiver);
 		
 		request.setAttribute("messages", messages);
 		return MESSAGES_JSP;

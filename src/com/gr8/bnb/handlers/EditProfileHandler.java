@@ -1,21 +1,19 @@
 package com.gr8.bnb.handlers;
 
 import java.io.IOException;
-import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation.Builder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import model.User;
 import com.gr8.bnb.helpers.InputChecker;
@@ -25,12 +23,10 @@ public class EditProfileHandler implements RequestHandler {
 	
 	private static final String HOME_JSP  = "/index.jsp";
 	
-	private EntityManager em;
-	private UserTransaction ut;
+	WebTarget userWebTarget; 
 	
-	public EditProfileHandler(EntityManager em, UserTransaction ut){
-		this.em = em;
-		this.ut = ut;
+	public EditProfileHandler(Client client){
+		this.userWebTarget = client.target("http://localhost:8081");
 	}
 	
 	public String handleGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -39,33 +35,39 @@ public class EditProfileHandler implements RequestHandler {
 	}
 
 	public String handlePost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SystemException, NotSupportedException {
+		/* Get the user params. */
 		String name     = request.getParameter("editName");
 		String surname  = request.getParameter("editSurname");
 		String password = request.getParameter("editPassword");
-		/* Check if valid parameters an get error */
 		String errorMessage = InputChecker.checkUserParameters(name, surname, password);
 
+		/* Get the session user. */
 		HttpSession session = request.getSession();
-		User sesionUser = (User) session.getAttribute("user");
-		User dbUser = User.findByEmail(ut, em, sesionUser.getEmail());
-		
-		if( dbUser != null ){
-			boolean updated = User.updateByEmail(ut, em, dbUser.getEmail(), name, surname, password);
-			
-			if (updated) {
-				sesionUser.setName(name);
-				sesionUser.setSurname(surname);
-				sesionUser.setPassword(password);
+		User sessionUser = (User) session.getAttribute("user");
+		if (errorMessage == null) {
+			/* Update the session user features. */
+			sessionUser.setName(name);
+			sessionUser.setSurname(surname);
+			sessionUser.setPassword(password);
 
-				session.setAttribute("user", sesionUser);
-				session.setAttribute("authenticated", true);
-			} else {
-				errorMessage = "Cannot update user on the database";
+			/* Perform the update request on the rest api. */
+			WebTarget webtargetPath = userWebTarget.path("user").path(sessionUser.getId().toString());
+			Builder builder = webtargetPath.request(MediaType.APPLICATION_JSON);
+
+			/* Check the response in order to see if performed successfully. */
+			Response res = builder.put(Entity.entity(sessionUser, MediaType.APPLICATION_JSON));
+			int status = res.getStatus();
+			
+			if (status != 200) {
+				errorMessage = "Cannot update user";
 			}
 		}
 		
-		/* If error message send message to the view */
-		if (errorMessage != null) {
+		/* If there is no error update the user in the session. */
+		if (errorMessage == null) {
+			session.setAttribute("user", sessionUser);
+			session.setAttribute("authenticated", true);
+		} else {
 			request.setAttribute("isEditProfilePage", (Boolean) true);
 			request.setAttribute("editProfileErrorMessage", errorMessage);
 		}
