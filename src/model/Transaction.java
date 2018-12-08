@@ -68,11 +68,11 @@ public class Transaction implements Serializable {
 		this.cardDate = cardDate;
 	}
 
-	public int getCardNum() {
+	public String getCardNum() {
 		return cardNum;
 	}
 
-	public void setCardNum(int cardNum) {
+	public void setCardNum(String cardNum) {
 		this.cardNum = cardNum;
 	}
 

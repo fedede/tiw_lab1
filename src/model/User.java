@@ -43,7 +43,7 @@ public class User implements Serializable {
 	private String name;
 	
 	@Column(name="is_admin", nullable = false)
-	private boolean isAdmin;
+	private boolean admin;
 
 	@Column(name="password", nullable = false)
 	private String password;
@@ -90,11 +90,11 @@ public class User implements Serializable {
 	}
 
 	public boolean isAdmin() {
-		return isAdmin;
+		return admin;
 	}
 
-	public void setAdmin(boolean isAdmin) {
-		this.isAdmin = isAdmin;
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
 	}
 
 	public String getPassword() {
