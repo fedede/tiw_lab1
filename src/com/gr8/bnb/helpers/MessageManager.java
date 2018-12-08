@@ -1,84 +1,63 @@
 package com.gr8.bnb.helpers;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Enumeration;
 
-import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
-import javax.jms.JMSException;
-import javax.jms.MessageProducer;
-import javax.jms.Queue;
-import javax.jms.QueueBrowser;
-import javax.jms.Session;
-import javax.jms.TextMessage;
+import java.util.Date;
+
 import javax.servlet.ServletException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation.Builder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import model.Message;
+import model.User;
 
 public class MessageManager {
-	private ConnectionFactory cf;
-	private Queue queue;
 	
-	public MessageManager(ConnectionFactory cf, Queue queue) {
-		this.cf = cf;
-		this.queue = queue;
+	WebTarget messageWebtarget;
+	
+	public MessageManager(Client client) {
+		this.messageWebtarget = client.target("http://localhost:8084/");
 	}
 	
-	public void send(String from, String to, String messageContent) throws ServletException {
-		try { 
-			Connection connection = cf.createConnection();
-			connection.start();
-			Session session = connection.createSession(false,
-					Session.AUTO_ACKNOWLEDGE);  
-			MessageProducer producer = session.createProducer(queue);
+	public boolean send(User from, User to, String messageContent) throws ServletException {
+		/* Create new message. */
+		Message message = new Message();
+		message.setContent(messageContent);
+		message.setSender(from);
+		message.setReceiver(to);
+		message.setSendDate(new Date());
 		
-			TextMessage message = session.createTextMessage(messageContent);
-			message.setStringProperty("senderEmail", from);
-			message.setStringProperty("receiverEmail", to);
-			message.setStringProperty("sendDate",new Date().toString());
-			message.setBooleanProperty("isRead", false);
-			
-			producer.send(message);
-			
-			//connection.stop();
-			producer.close();
-			session.close();
-			connection.close();
+		/* Send post to the REST API. */
+		WebTarget messagePath = messageWebtarget.path("message");
+		Builder builder = messagePath.request(MediaType.APPLICATION_JSON);
+		Response res = builder.post(Entity.entity(message, MediaType.APPLICATION_JSON));
 		
-		} catch (JMSException e) {
-			throw new ServletException(e.getLocalizedMessage()); 
+		/* If resource created return true. */
+		if (res.getStatus() != 201) {
+			return false;
 		}
+		return true;
 	}
 	
-	public ArrayList<TextMessage> receive(String to) throws ServletException {
-		ArrayList<TextMessage> messages = new ArrayList<TextMessage>();
+	public Message[] receive(User to) throws ServletException {
+		/* Get the messages to */
+		WebTarget messagePath = messageWebtarget.path("users")
+				.path(to.getId().toString())
+				.path("messages");
 		
-		String selector = "receiverEmail = '" + to + "'" ;
-		try { 
-			Connection connection = cf.createConnection(); 
-			connection.start();
-			Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-			QueueBrowser browser = session.createBrowser(queue, selector);
-			Enumeration messagesEnum = browser.getEnumeration();
+		Builder builder = messagePath.request(MediaType.APPLICATION_JSON);
+		Response res = builder.get();
 		
-			while (messagesEnum.hasMoreElements()) {
-				Object objMsg = messagesEnum.nextElement();
-				
-				if (objMsg != null) {
-					if (objMsg instanceof TextMessage) {
-						TextMessage message = (TextMessage) objMsg;
-						messages.add(message);
-					}
-				}
-			} 
-
-			//connection.stop(); 
-			browser.close();
-			session.close();
-			connection.close();
-		} catch (JMSException e){
-			throw new ServletException(e.getLocalizedMessage());
+		/* If the response is not ok then return null. */
+		if (res.getStatus() != 200) {
+			return null;
 		}
 		
+		/* Return messages towards user to. */
+		Message[] messages = res.readEntity(Message[].class);
 		return messages;
 	}
 }
