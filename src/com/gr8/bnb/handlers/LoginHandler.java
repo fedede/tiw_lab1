@@ -1,20 +1,17 @@
 package com.gr8.bnb.handlers;
 
 import java.io.IOException;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Invocation.Builder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import model.User;
 
@@ -23,12 +20,10 @@ public class LoginHandler implements RequestHandler {
 
 	private static final String HOME_JSP  = "/index.jsp";
 	
-	private EntityManager em;
-	private UserTransaction ut;
+	WebTarget userWebTarget;
 	
-	public LoginHandler(EntityManager em, UserTransaction ut){
-		this.em = em;
-		this.ut = ut;
+	public LoginHandler(Client client){
+		this.userWebTarget = client.target("http://localhost:8081");
 	}
 	
 	public String handleGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -37,31 +32,34 @@ public class LoginHandler implements RequestHandler {
 	}
 
 	public String handlePost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, NotSupportedException, SystemException {
+		String errorMessage = null;
 		
+		/* Get the login and password email. */
 		String email = request.getParameter("loginEmail");
 		String password = request.getParameter("loginPassword");
-		//String rememberMe = request.getParameter("remember-me");
 
-		String errorMessage = null;
-
+		/* Perform the get request. */
+		WebTarget userPath = userWebTarget.path("users")
+				.queryParam("email", email)
+				.queryParam("password", password);
+		
+		Builder builder = userPath.request(MediaType.APPLICATION_JSON);
+		
+		Response res = builder.get();
+		
 		HttpSession session = request.getSession();
+		if (res.getStatus() == HttpServletResponse.SC_OK) {
+			User user = res.readEntity(User.class);
 		
-		User user = null; //User.findByEmailAndPass(ut, em, email, password);
-		
-		if (user == null) {
-			errorMessage = "Cannot find this user";
-		}
-		
-		if (user != null){
 			/* set the user and mark the session as authenticate */
 			session.setAttribute("user", user);
 			session.setAttribute("authenticated", true);
-		}else{				
-			/* Open login form on load with error message */
-			request.setAttribute("isLoginPage", (Boolean) true);
-			errorMessage = "Wrong email or password";
+		} else {
+			errorMessage = "Invalid email or password";
 		}
 
+
+		/* If error message then set in the request. */
 		if (errorMessage != null) {
 			request.setAttribute("LoginErrorMessage", errorMessage);
 		}

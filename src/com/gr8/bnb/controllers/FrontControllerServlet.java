@@ -2,12 +2,7 @@ package com.gr8.bnb.controllers;
 
 
 import java.io.IOException; 
-
-import javax.annotation.Resource;
-import javax.jms.ConnectionFactory;
-import javax.jms.Queue;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+ 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.NotSupportedException;
 import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 

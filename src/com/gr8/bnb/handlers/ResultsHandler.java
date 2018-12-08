@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.NotSupportedException;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
+import javax.ws.rs.client.Client;
 
 //import com.gr8.bnb.models.House;
 import model.House;
@@ -28,9 +29,8 @@ public class ResultsHandler implements  RequestHandler {
 	private EntityManager em;
 	private UserTransaction ut;
 	
-	public ResultsHandler(EntityManager em, UserTransaction ut){
-		this.em = em;
-		this.ut = ut;
+	public ResultsHandler(Client client){
+
 	}
 
 

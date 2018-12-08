@@ -46,28 +46,32 @@ public class EditProfileHandler implements RequestHandler {
 		User sessionUser = (User) session.getAttribute("user");
 		if (errorMessage == null) {
 			/* Update the session user features. */
-			sessionUser.setName(name);
-			sessionUser.setSurname(surname);
-			sessionUser.setPassword(password);
+			User user = new User();
+			user.setId(sessionUser.getId());
+			user.setName(name);
+			user.setSurname(surname);
+			user.setPassword(password);
 
 			/* Perform the update request on the rest api. */
 			WebTarget webtargetPath = userWebTarget.path("user").path(sessionUser.getId().toString());
 			Builder builder = webtargetPath.request(MediaType.APPLICATION_JSON);
 
 			/* Check the response in order to see if performed successfully. */
-			Response res = builder.put(Entity.entity(sessionUser, MediaType.APPLICATION_JSON));
+			Response res = builder.put(Entity.entity(user, MediaType.APPLICATION_JSON));
 			int status = res.getStatus();
 			
-			if (status != 200) {
+			if (status == HttpServletResponse.SC_OK) {
+				user = res.readEntity(User.class);
+				
+				session.setAttribute("user", user);
+				session.setAttribute("authenticated", true);
+			} else {
 				errorMessage = "Cannot update user";
 			}
 		}
 		
 		/* If there is no error update the user in the session. */
-		if (errorMessage == null) {
-			session.setAttribute("user", sessionUser);
-			session.setAttribute("authenticated", true);
-		} else {
+		if (errorMessage != null) {
 			request.setAttribute("isEditProfilePage", (Boolean) true);
 			request.setAttribute("editProfileErrorMessage", errorMessage);
 		}
