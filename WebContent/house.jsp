@@ -113,10 +113,25 @@
                             </tbody>
                         </table>
                         <div class="col-xxs-12 col-xs-6 mt">
-                            <input id="book" type="book" class="btn btn-primary btn-block" value="Book">
+                        	<c:choose> 
+								<c:when test="${sessionScope.authenticated == true}">
+                            		<input id="book" type="book" class="btn btn-primary btn-block" value="Book">
+                        		</c:when>
+                        		<c:otherwise>
+                        			<input id="book" type="book" class="btn btn-primary btn-block disabled" value="Book">
+                        		</c:otherwise>
+                        	</c:choose>
                         </div>
                         <div class="col-xxs-12 col-xs-6 mt">
-                            <input id="contact" type="contact" class="btn btn-primary btn-block" value="Contact">
+                            <c:choose> 
+								<c:when test="${sessionScope.authenticated == true}">
+                            		<input id="contact" type="contact" class="btn btn-primary btn-block" value="Contact">
+                        		</c:when>
+                        		<c:otherwise>
+                        			<input id="contact" type="contact" class="btn btn-primary btn-block disabled" value="Contact">
+                        		</c:otherwise>
+                        	</c:choose>
+                            
                         </div>
                                                                         
                     </div>
@@ -126,181 +141,33 @@
 				</div>
 			</div>
 		</div>
-		<div class="modal fade" id="SendMessageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered" role="document">
-				<div class="modal-content">
-				
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h1 class="h3 mb-3 font-weight-normal">Write your message</h1>
-					</div>
-					<div class="modal-body">
-						<form class="form-registro" action="message" method="post" id="message-form">
-							<input type="hidden" id="ownerId" name="owner" class="form-control" value="${requestScope.foundHouse.getUser().getId()}">
+		
+		   
+		
+        <c:choose> 
+			<c:when test="${sessionScope.authenticated == true}">
+			    <%@ include file="include/sendMessageModal.jsp" %>
+		        <%@ include file="include/bookModal.jsp" %>      
+				<%@ include file="include/editProfileModal.jsp" %>
+				<%@ include file="include/publishHouseModal.jsp" %>
+			</c:when>
+			<c:otherwise>
+				<%@ include file="include/loginModal.jsp" %>
+				<%@ include file="include/signUpModal.jsp" %>  
+			</c:otherwise>
+		</c:choose>
+            
+        <%@ include file="include/footer.jsp" %>
 
-							<textarea name="message">Enter your message here...</textarea>
-							<button class="btn btn-lg btn-primary btn-block" type="submit" id="Registrate">Send</button>
-						</form>
-							
-					</div>
-				</div>
-			</div>
-		</div>            
-		<div class="modal fade" id="BookDetailsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered" role="document">
-				<div class="modal-content">
-				
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h1 class="h3 mb-3 font-weight-normal">Give you info for renting the house</h1>
-					</div>
-					<div class="modal-body">
-						<form class="form-registro" action="house" method="post" id="message-form">
-							<input type="hidden" id="rentOwner" name="rentOwner" class="form-control" value="${requestScope.foundHouse.getUser().getEmail()}">
-							<input type="hidden" id="rentReceiver" name="rentReceiver" class="form-control" value="${sessionScope.user.getEmail()}">
-							<input type="hidden" id="rentHouse" name="rentHouse" class="form-control" value="${sessionScope.foundHouse.getId()}">
-							<input type="text" id="creditCard" name="creditCard" class="form-control" placeholder="Credit card number (10 digits)" pattern="[0-9]{10}"required>
-							<input type="text" id="cvc" name="cvc" class="form-control" placeholder="CV2 (3 digits)" pattern="[0-9]{3}" required>
-							<div class="input-field">
-								<label for="date-card">Card expiration date:</label>
-								<input type="text" class="form-control" id="dateCard" name="dateCard" placeholder="mm/yy"/>
-							</div>
-							<div class="input-field">
-								<label for="date-start">Check-in:</label>
-								<input type="text" class="form-control" id="dateStart" name="dateStart" placeholder="mm/dd/yyyy"/>
-							</div>
-							<div class="input-field">
-								<label for="date-end">Check-out:</label>
-								<input type="text" class="form-control" id="dateEnd" name="dateEnd" placeholder="mm/dd/yyyy"/>
-							</div>
-							
-							<button class="btn btn-lg btn-primary btn-block" type="submit" id="Registrate">Rent</button>
-						</form>
-							
-					</div>
-				</div>
-			</div>
-		</div>            
-		  
-         
-           <footer>
-			<div id="footer">
-				<div class="container">
-					<div class="row row-bottom-padded-md">
-						<div class="col-md-2 col-sm-2 col-xs-12 fh5co-footer-link">
-							<h3>About TIWbnb</h3>
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla porttitor enim et libero pharetra, Nam ipsum augue, eleifend ut dui eu, egestas malesuada velit. </p>
-						</div>
-						<div class="col-md-2 col-sm-2 col-xs-12 fh5co-footer-link">
-							<h3>Lorem ipsum </h3>
-							<ul>
-								<li><a href="#">Xxxxx xxxx</a></li>
-								<li><a href="#">Xxxxx xxxx</a></li>
-								<li><a href="#">Xxxxx xxxx</a></li>
-								<li><a href="#">Xxxxx xxxx</a></li>
-							</ul>
-						</div>
-						<div class="col-md-2 col-sm-2 col-xs-12 fh5co-footer-link">
-							<h3>Lorem ipsum </h3>
-							<ul>
-								<li><a href="#">Xxxxx xxxx</a></li>
-								<li><a href="#">Xxxxx xxxx</a></li>
-								<li><a href="#">Xxxxx xxxx</a></li>
-								<li><a href="#">Xxxxx xxxx</a></li>
-							</ul>
-						</div>
-						<div class="col-md-2 col-sm-2 col-xs-12 fh5co-footer-link">
-							<h3>Lorem ipsum </h3>
-							<ul>
-								<li><a href="#">Xxxxx xxxx</a></li>
-								<li><a href="#">Xxxxx xxxx</a></li>
-								<li><a href="#">Xxxxx xxxx</a></li>
-								<li><a href="#">Xxxxx xxxx</a></li>
-							</ul>
-						</div>
-						<div class="col-md-2 col-sm-2 col-xs-12 fh5co-footer-link">
-							<h3>Lorem ipsum </h3>
-							<ul>
-								<li><a href="#">Xxxxx xxxx</a></li>
-								<li><a href="#">Xxxxx xxxx</a></li>
-								<li><a href="#">Xxxxx xxxx</a></li>
-								<li><a href="#">Xxxxx xxxx</a></li>
-							</ul>
-						</div>
-						<div class="col-md-2 col-sm-2 col-xs-12 fh5co-footer-link">
-							<h3>Lorem ipsum </h3>
-							<ul>
-								<li><a href="#">Xxxxx xxxx</a></li>
-								<li><a href="#">Xxxxx xxxx</a></li>
-							</ul>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-6 col-md-offset-3 text-center">
-							<p class="fh5co-social-icons">
-								<a href="#"><i class="icon-twitter2"></i></a>
-								<a href="#"><i class="icon-facebook2"></i></a>
-								<a href="#"><i class="icon-instagram"></i></a>
-								<a href="#"><i class="icon-dribbble2"></i></a>
-								<a href="#"><i class="icon-youtube"></i></a>
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</footer>
-
-	
 
 	</div>
 	<!-- END fh5co-page -->
 
 	</div>
 	<!-- END fh5co-wrapper -->
-
+    <%@ include file="include/scripts.jsp" %>
                 
-	<!-- jQuery -->
-
-	<script src="js/jquery.min.js"></script>
-	<!-- jQuery Easing -->
-	<script src="js/jquery.easing.1.3.js"></script>
-	<!-- Bootstrap -->
-	<script src="js/bootstrap.min.js"></script>
-	<!-- Waypoints -->
-	<script src="js/jquery.waypoints.min.js"></script>
-	<script src="js/sticky.js"></script>
-
-	<!-- Stellar -->
-	<script src="js/jquery.stellar.min.js"></script>
-	<!-- Superfish -->
-	<script src="js/hoverIntent.js"></script>
-	<script src="js/superfish.js"></script>
-	<!-- Magnific Popup -->
-	<script src="js/jquery.magnific-popup.min.js"></script>
-	<script src="js/magnific-popup-options.js"></script>
-	<!-- Date Picker -->
-	<script src="js/bootstrap-datepicker.min.js"></script>
-	<!-- CS Select -->
-	<script src="js/classie.js"></script>
-	<script src="js/selectFx.js"></script>
-	
-	<!-- Main JS -->
-	<script src="js/main.js"></script>
-
-        
-    <script>
-	$(document).on('click', '#contact', function () {
-		$("#SendMessageModal").modal("show");
-	});
-	$(document).on('click', '#book', function () {
-		$("#BookDetailsModal").modal("show");
-	});
-		
-    </script>
+                
         
 	</body>
 </html>
