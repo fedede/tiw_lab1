@@ -15,6 +15,10 @@ import javax.transaction.NotSupportedException;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Invocation.Builder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 //import com.gr8.bnb.models.House;
 import model.House;
@@ -25,12 +29,11 @@ import model.House;
 public class ResultsHandler implements  RequestHandler {
 
 	private final String RESULTS_PAGE = "/results.jsp";
-	private final int MAX_HOUSES_PER_PAGE = 10;
-	private EntityManager em;
-	private UserTransaction ut;
+	
+	private final WebTarget houseWebTarget;
 	
 	public ResultsHandler(Client client){
-
+		this.houseWebTarget = client.target("http://localhost:8082/");
 	}
 
 
@@ -42,69 +45,71 @@ public class ResultsHandler implements  RequestHandler {
 	 */
 	public String handleGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, NotSupportedException, SystemException {
-		
-		SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
-		String page = request.getParameter("page");
-		int pageNum = (page == null) ? 0 : Integer.parseInt(page);
-		
-		String city =  request.getParameter("city").toUpperCase();
-		String sInitDate =  request.getParameter("date-start");
-		String sEndDate =  request.getParameter("date-end");
-		String sPrice = request.getParameter("price");
-		String sType = request.getParameter("ac-type");
-		String sNumAdults =  request.getParameter("adults");
-		String sNumChildren = request.getParameter("children");
-		
-				
-		Date endDate = null;
-		Date initDate = null;
-		try {
-			initDate = format.parse(sInitDate);
-			endDate = format.parse(sEndDate);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		int minPrice = 0;
-		int maxPrice = 0;
-		if(sPrice.equals("P1")){
-			 minPrice = 0;
-			 maxPrice = 35;
-		}else if(sPrice.equals("P2")){
-			minPrice = 36;
-			maxPrice = 69;
-		}else if(sPrice.equals("P3")){
-			minPrice = 70;
-			maxPrice = 130;
-		}else{
-			minPrice = 131;
-			maxPrice = Integer.MAX_VALUE;
-		}
-				
-		byte []isPrivate = sType.equals("shared") ? new byte[]{0} : new byte[]{1}; 
-		int guestNum = Integer.parseInt(sNumAdults);
-		ut.begin();
-		List<House> homeList = em.createQuery("SELECT h from Home h "
-				+ "WHERE h.city = :city "
-				+ "AND h.guestNum >= :guestNum "
-				+ "AND h.isPrivate = :isPrivate "
-				+ "AND h.price BETWEEN :minPrice AND :maxPrice "
-				+ "AND h.initDate <= :initDate "
-				+ "AND h.endDate > :endDate "
-				+ "ORDER BY h.id ",
-				House.class)
-				.setParameter("city", city)
-				.setParameter("guestNum", guestNum)
-				.setParameter("isPrivate", isPrivate)
-				.setParameter("minPrice", minPrice)
-				.setParameter("maxPrice", maxPrice)
-				.setParameter("initDate", initDate)
-				.setParameter("endDate", endDate)
-				.setFirstResult(pageNum * MAX_HOUSES_PER_PAGE)
-				.setMaxResults(MAX_HOUSES_PER_PAGE)
-				.getResultList();
+		String errorMessage = null;
 
-		request.getSession().setAttribute("houses", homeList);
+		/* Get parameters from modal. */
+		String city =  request.getParameter("city").toUpperCase();
+		String startDate =  request.getParameter("date-start");
+		String endDate =  request.getParameter("date-end");
+		String minPrice = request.getParameter("min-price");
+		String maxPrice = request.getParameter("max-price");
+		String type = request.getParameter("ac-type");
+		String guestCount =  request.getParameter("guest-count");
+		
+		/* Parse parameters to its tipes. */
+		//Float minPrice = (sMinPrice == null) ? null : Float.parseFloat(sMinPrice);
+		//Float maxPrice = (sMaxPrice == null) ? null : Float.parseFloat(sMaxPrice);
+		//Integer guestCount = (sGuestCount ==  null) ? null : Integer.parseInt(sGuestCount);
+		Boolean shared = null;
+		if (type != null) {
+			shared = type.equals("shared") ? false : true; 
+		}
+		
+		/* Set the houses path. */
+		WebTarget housePath = houseWebTarget.path("houses");
+		
+		/* Add to the query the non null parameters. */
+		if (city != null) {
+			housePath.queryParam("city", city);
+		}
+		
+		if (minPrice != null) {
+			housePath.queryParam("minPrice", minPrice);
+		}
+		
+		if (maxPrice != null) {
+			housePath.queryParam("maxPrice", maxPrice);
+		}
+		
+		if (guestCount != null) {
+			housePath.queryParam("guestCount", guestCount);
+		}
+		
+		if (shared != null) {
+			housePath.queryParam("shared", shared);
+		}
+		
+		if (startDate != null) {
+			housePath.queryParam("startDate", startDate);
+		}
+		
+		if (endDate != null) {
+			housePath.queryParam("endDate", endDate);
+		}
+		
+		/* Perform the request. */
+		Builder builder = housePath.request(MediaType.APPLICATION_JSON);
+		Response res = builder.get();
+		
+		House[] houses = null;
+		if (res.getStatus() == HttpServletResponse.SC_OK) {
+			houses = res.readEntity(House[].class);
+			request.setAttribute("houses", houses);
+		} else {
+			errorMessage = "Couldn't read houses";
+			request.setAttribute("errorMessage", errorMessage);
+		}
+		
 		return RESULTS_PAGE;
 	}
 
