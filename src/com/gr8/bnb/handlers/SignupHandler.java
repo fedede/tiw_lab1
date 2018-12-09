@@ -59,8 +59,9 @@ public class SignupHandler implements RequestHandler {
 		/* Check if resource is created. */
 		if (res.getStatus() == HTTP_CREATED ) {
 			HttpSession session = request.getSession();
-
-			session.setAttribute("user", user);
+			User sessionUser = res.readEntity(User.class);
+			
+			session.setAttribute("user", sessionUser);
 			session.setAttribute("authenticated", true);
 		} else {
 			errorMessage = "Could not create user";
