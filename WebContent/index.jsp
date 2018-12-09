@@ -120,18 +120,17 @@
 														</div>
 													</div>
 	                                            	
-													<div class="col-sm-12 mt">
-														<section>
-															<label for="class">Price</label>
-															
-															<select class="cs-select cs-skin-border" name="price">
-																<option value="" disabled selected>Select Price</option>
-																<option value="P1">Under 35EUR</option>            
-																<option value="P2">36EUR - 69EUR</option>
-																<option value="P3">70EUR - 130EUR¬</option>
-																<option value="P4">131EUR or more</option>
-															</select>
-														</section>
+													<div class="col-xxs-12 col-xs-6 mt alternate">
+														<div class="input-field">
+															<label for="min-price">Min price:</label>
+															<input type="number" class="form-control" id="min-price" name="min-price" placeholder="30.0"/>
+														</div>
+													</div>
+													<div class="col-xxs-12 col-xs-6 mt alternate">
+														<div class="input-field">
+															<label for="max-price">Max price:</label>
+															<input type="number" class="form-control" id="max-price" name="max-price" placeholder="45.0"/>
+														</div>
 													</div>
 	                                            	
 	        										<div class="col-sm-12 mt">
@@ -139,9 +138,8 @@
 															<label for="class">Type of accommodation</label>
 															<select class="cs-select cs-skin-border" name="ac-type">
 																<option value="" disabled selected>Select House Type</option>
-																<option value="full">Full house</option>
-																<option value="private">Private room</option>
-																<option value="shared">Shared room</option>
+																<option value="private">Private</option>
+																<option value="shared">Shared</option>
 															</select>
 														</section>
 													</div>
@@ -149,7 +147,7 @@
 													<div class="col-xs-12 mt">
 														<section>
 															<label for="class">Adults:</label>
-															<select class="cs-select cs-skin-border" id="adults" name="adults">
+															<select class="cs-select cs-skin-border" id="guest-count" name="guest-count">
 																<option value="" disabled selected>0</option>
 																<option value="1">1</option>
 																<option value="2">2</option>
