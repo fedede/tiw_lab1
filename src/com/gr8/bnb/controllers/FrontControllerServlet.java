@@ -46,6 +46,7 @@ public class FrontControllerServlet extends HttpServlet {
 	private final String RESULTS_PAGE = "/results";
 	private final String EDITPROFILE_PAGE = "/editprofile";
 	private final String PUBLISHHOUSE_PAGE = "/publishHouse";
+	private final String USER_HOUSES_PAGE = "/userHouses";
 	
 	public void init() throws ServletException {
 		ClientConfig config = new ClientConfig();
@@ -63,6 +64,7 @@ public class FrontControllerServlet extends HttpServlet {
 		handlerHash.put(RESULTS_PAGE, new com.gr8.bnb.handlers.ResultsHandler(client));
 		handlerHash.put(EDITPROFILE_PAGE, new com.gr8.bnb.handlers.EditProfileHandler(client));
 		handlerHash.put(PUBLISHHOUSE_PAGE, new com.gr8.bnb.handlers.HousePublishHandler(client));
+		handlerHash.put(USER_HOUSES_PAGE, new com.gr8.bnb.handlers.UserHousesHandler(client));
 		
 		noAuthGet.add(LOGIN_PAGE);
 		noAuthGet.add(SIGNUP_PAGE);

@@ -10,9 +10,10 @@
 			<nav id="fh5co-menu-wrap" role="navigation">
 				<ul class="sf-menu" id="fh5co-primary-menu">
 					<li class="active"><a href="index.jsp">Home</a></li>
-					<li ><a href="houses">Apartments</a></li>
+	
 					<c:choose>
 						<c:when test="${sessionScope.authenticated == true}">
+							<li ><a href="userHouses">Houses</a></li>
 							<li ><a href="messages">Messages</a></li>
 							<li><a href="#" id="housePub">Publish House</a></li>                              
 							<li><a href="#" id="userId"><c:out value="${sessionScope.user.name}"/> Profile</a></li> 

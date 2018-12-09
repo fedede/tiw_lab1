@@ -1,19 +1,13 @@
 package com.gr8.bnb.handlers;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
-import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.NotSupportedException;
 import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.WebTarget;

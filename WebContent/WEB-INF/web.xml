@@ -16,6 +16,10 @@
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>FrontControllerServlet</servlet-name>
+    <url-pattern>/userHouses</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FrontControllerServlet</servlet-name>
     <url-pattern>/logout</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
