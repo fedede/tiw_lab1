@@ -1,17 +1,8 @@
 package model;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 
-import javax.jms.ConnectionFactory;
 import javax.persistence.*;
-import javax.servlet.ServletException;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
 
 import java.util.Date;
 import java.util.List;

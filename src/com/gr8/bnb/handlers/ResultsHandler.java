@@ -50,10 +50,6 @@ public class ResultsHandler implements  RequestHandler {
 		String type = request.getParameter("ac-type");
 		String guestCount =  request.getParameter("guest-count");
 		
-		/* Parse parameters to its tipes. */
-		//Float minPrice = (sMinPrice == null) ? null : Float.parseFloat(sMinPrice);
-		//Float maxPrice = (sMaxPrice == null) ? null : Float.parseFloat(sMaxPrice);
-		//Integer guestCount = (sGuestCount ==  null) ? null : Integer.parseInt(sGuestCount);
 		Boolean shared = null;
 		if (type != null) {
 			shared = type.equals("shared") ? false : true; 

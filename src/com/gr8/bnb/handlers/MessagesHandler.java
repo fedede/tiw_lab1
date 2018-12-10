@@ -30,6 +30,7 @@ public class MessagesHandler implements RequestHandler {
 		Message[] messages = messageManager.receive(receiver);
 		
 		request.setAttribute("messages", messages);
+		
 		return MESSAGES_JSP;
 	}
 	
