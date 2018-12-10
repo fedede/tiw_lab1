@@ -20,6 +20,11 @@ import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.client.Invocation.Builder;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 //import com.gr8.bnb.models.User;
 import model.User;
@@ -30,13 +35,11 @@ import model.Transaction;
 public class HousePublishHandler implements RequestHandler {
 
 	private static final String HOME_JSP = "/index.jsp";
+	private static final int HTTP_CREATED = 201;
 	
-	
-	private EntityManager em;
-	private UserTransaction ut;
-	
+	WebTarget houseWebTarget;
 	public HousePublishHandler(Client client){
-
+		this.houseWebTarget = client.target("http://localhost:8082/");
 	}
 	
 	public String handleGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, NotSupportedException, SystemException{
@@ -109,11 +112,11 @@ public class HousePublishHandler implements RequestHandler {
 			errorMessage = "Error in price2" + sPrice + "|| " + price;
 		}
 
-		Date initDate;
+		Date startDate;
 		Date endDate;
 		SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
 		try{
-			initDate = (Date) format.parse(sInitDate);
+			startDate = (Date) format.parse(sInitDate);
 			endDate = (Date) format.parse(sEndDate);
 		
 		}catch(java.text.ParseException e){
@@ -124,14 +127,26 @@ public class HousePublishHandler implements RequestHandler {
 		/* If no error message try to create the user */
 		if (errorMessage == null) {
 			User owner = (User) session.getAttribute("user");
+			House house = new House();
+			house.setStartDate(startDate);
+			house.setEndDate(endDate);
+			house.setName(houseName);
+			house.setFullDescription(fullDesc);
+			house.setShortDescription(shortDesc);
+			house.setCity(city.toUpperCase());
+			house.setImageUrl(photo);
+			house.setMaxGuests(guestNum);
+			house.setShared(type.equals("shared"));
+			house.setPrice(price);
+			house.setOwner(owner);
+			WebTarget housePath = houseWebTarget.path("house");
+			Builder builder = housePath.request(MediaType.APPLICATION_JSON);
 			
-			boolean isPrivate = type.equals("shared");
-			House home = null; //House.create(em, ut, houseName, owner, city, fullDesc,
-					//shortDesc, guestNum, isPrivate, photo, price, initDate, endDate);
+			Response res = builder.post(Entity.entity(house, MediaType.APPLICATION_JSON));
 			
-		
-			if (home == null) {
-				errorMessage = "Could not publish house"; 
+			/* Check if resource is created. */
+			if (res.getStatus() != HTTP_CREATED ) {
+				errorMessage = "Problem publishing house";
 			}
 		}
 		

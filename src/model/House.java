@@ -154,7 +154,15 @@ public class House implements Serializable {
 	public void setPrivate(boolean shared) {
 		this.shared = shared;
 	}
-
+	
+	public void setShared(boolean shared) {
+		this.shared = shared;
+	}
+	
+	public boolean getShared(){
+		return this.shared;
+	}
+	
 	public float getPrice() {
 		return price;
 	}
