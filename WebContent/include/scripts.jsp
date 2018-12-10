@@ -113,3 +113,9 @@
 
  });
 </script>
+
+<c:if test="${requestScope.errorMessage != null }">
+<script>
+	alert(<c:out value="${requestScope.errorMessage}" />);
+</script>
+</c:if>
