@@ -14,9 +14,9 @@
 			</div>
 			<div class="modal-body">
 				<form class="form-registro" action="house" method="post" id="message-form">
-					<input type="hidden" id="rentOwner" name="rentOwner" class="form-control" value="${requestScope.foundHouse.getUser().getEmail()}">
-					<input type="hidden" id="rentReceiver" name="rentReceiver" class="form-control" value="${sessionScope.user.getEmail()}">
-					<input type="hidden" id="rentHouse" name="rentHouse" class="form-control" value="${sessionScope.foundHouse.getId()}">
+					<input type="hidden" id="rentOwner" name="rentOwner" class="form-control" value="${requestScope.foundHouse.getOwner().getId()}">
+					<input type="hidden" id="rentReceiver" name="rentReceiver" class="form-control" value="${sessionScope.user.getId()}">
+					<input type="hidden" id="rentHouse" name="rentHouse" class="form-control" value="${requestScope.foundHouse.getId()}">
 					<input type="text" id="creditCard" name="creditCard" class="form-control" placeholder="Credit card number (10 digits)" pattern="[0-9]{10}"required>
 					<input type="text" id="cvc" name="cvc" class="form-control" placeholder="CV2 (3 digits)" pattern="[0-9]{3}" required>
 					<div class="input-field">

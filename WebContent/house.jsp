@@ -89,22 +89,23 @@
 					</div>
 					<div class="col-md-6 animate-box">
                         <span class="description">
-						<p>${foundHouse.fullDesc}</p> 
+						<p>${foundHouse.getFullDescription()}</p> 
                         </span>
                         <table class="table">
                             <tbody>
                                 <tr>                                
                                     <th scope="row">Host:</th>
-                                    <td><span class="host">${requestScope.foundHouse.getUser().getName()}</span></td>
+                                    <td><span class="host">${requestScope.foundHouse.getOwner().getName()}</span></td>
+                                    
                                 </tr>
                                 
                                 <tr>                                
                                         <th scope="row">Price:</th>
-                                    <td><span class="price">${foundHouse.price}EUR</span></td>
+                                    <td><span class="price">${foundHouse.getPrice()}EUR</span></td>
                                 </tr>
                                 <tr>
                                         <th scope="row">Number of beds:</th>
-                                        <td><span class="beds">${foundHouse.guestNum}</span></td>
+                                        <td><span class="beds">${foundHouse.getMaxGuests()}</span></td>
                                 </tr>
                                 <tr>
                                         <th scope="row">Type of apartment:</th>
@@ -136,7 +137,7 @@
                                                                         
                     </div>
 					<div class="col-md-6 animate-box">
-						<img class="img-responsive" src="${requestScope.foundHouse.getImg()}" alt="travel">
+						<img class="img-responsive" src="${requestScope.foundHouse.getImageUrl()}" alt="travel">
 					</div>
 				</div>
 			</div>

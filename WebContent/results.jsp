@@ -102,14 +102,14 @@
 							<div class="col-md-4 col-sm-6 fh5co-tours animate-box"
 								data-animate-effect="fadeIn">
 								<div href="#">
-									<img src=${house.getImg()}
+									<img src=${house.getImageUrl()}
 										alt="Free HTML5 Website Template by FreeHTML5.co"
 										class="img-responsive">
 									<div class="desc">
 										<span></span>
 										<h3>${house.getName()}</h3>
-										<span>${house.getShortDesc()}</span> <span class="price">${house.getPrice()}EUR</span>
-										<a class="btn btn-primary btn-outline" href="house?houseId=${house.id}">Select <i
+										<span>${house.getShortDescription()}</span> <span class="price">${house.getPrice()}EUR</span>
+										<a class="btn btn-primary btn-outline" href="house?houseId=${house.getId()}">Select <i
 											class="icon-arrow-right22"></i></a>
 									</div>
 								</div>
