@@ -22,6 +22,7 @@ import com.gr8.bnb.helpers.MessageManager;
 // Models
 import model.House;
 import model.TransactionRequest;
+import model.User;
 
 
 /**
@@ -122,7 +123,8 @@ public class HouseHandler implements RequestHandler {
 			
 			/* If owner exists then get message data. */
 			if (res2.getStatus() == 200) {
-				User owner = res.readEntity(User.class);
+				User owner = res2.readEntity(User.class);
+				
 				String message = "Hi " + owner.getName() + "!"
 								+ sender.getName() + " " + sender.getSurname() + 
 								" wants to rent your house [HOUSENAME] from " +
