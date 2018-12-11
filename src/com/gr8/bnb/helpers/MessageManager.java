@@ -4,6 +4,7 @@ package com.gr8.bnb.helpers;
 import java.util.Date;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation.Builder;
@@ -36,7 +37,7 @@ public class MessageManager {
 		Response res = builder.post(Entity.entity(message, MediaType.APPLICATION_JSON));
 		
 		/* If resource created return true. */
-		if (res.getStatus() != 201) {
+		if (res.getStatus() != HttpServletResponse.SC_CREATED) {
 			return false;
 		}
 		return true;
@@ -52,7 +53,7 @@ public class MessageManager {
 		Response res = builder.get();
 		
 		/* If the response is not ok then return null. */
-		if (res.getStatus() != 200) {
+		if (res.getStatus() != HttpServletResponse.SC_OK) {
 			return null;
 		}
 		
