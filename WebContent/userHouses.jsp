@@ -85,7 +85,7 @@
 			<!-- end:header-top -->
 
 			<c:choose>
-			<c:when test="${houses == null || fn:length(house) le 0 }">
+			<c:when test="${empty houses}">
 			<div id="fh5co-tours" class="fh5co-section-gray">
 				<div class="container">
 					<div class="row">
