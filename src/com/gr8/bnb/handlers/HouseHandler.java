@@ -41,13 +41,18 @@ public class HouseHandler implements RequestHandler {
 	private String HOUSES_PAGE = "/house.jsp";
 	private static final int HTTP_CREATED = 201;
 	
-	private MessageManager messageManager;
+	MessageManager messageManager;
 	
+	WebTarget userWebtarget;
 	WebTarget transactionWebTarget;
 	WebTarget houseWebTarget;
-	public HouseHandler(Client client){
+	
+	public HouseHandler(Client client, MessageManager messageManager){
 		this.transactionWebTarget = client.target("http://localhost:8083/");
 		this.houseWebTarget = client.target("http://localhost:8082/");
+		this.userWebtarget = client.target("http://localhost:8081/");
+		this.messageManager = messageManager;
+
 	}
 	
 	
@@ -117,6 +122,27 @@ public class HouseHandler implements RequestHandler {
 		/* Check if resource is created. */
 		if (res.getStatus() != HTTP_CREATED ) {
 			errorMessage = "Could not book house";
+		}else{
+			User sender = (User) request.getSession().getAttribute("user");
+			
+			/* Get data from the user API. */
+			WebTarget userPath = userWebtarget.path("users").path(sOwnerId);
+			Builder builder2 = userPath.request(MediaType.APPLICATION_JSON);
+			Response res2 = builder2.get();
+			
+			/* If owner exists then get message data. */
+			if (res2.getStatus() == 200) {
+				User owner = res.readEntity(User.class);
+				String message = "Hi " + owner.getName() + "!"
+								+ sender.getName() + " " + sender.getSurname() + 
+								" wants to rent your house [HOUSENAME] from " +
+								sCheckIn + " to " + sCheckOut + 
+								"Do you want to <div>ACCEPT</div>?";
+				boolean success = messageManager.send(sender, owner, message);
+				if (!success) {
+					errorMessage = "It was not possible to send message";
+				}
+			}
 		}
 
 		if (errorMessage != null) {

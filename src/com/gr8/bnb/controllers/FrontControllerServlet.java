@@ -58,7 +58,7 @@ public class FrontControllerServlet extends HttpServlet {
 		handlerHash.put(LOGIN_PAGE, new com.gr8.bnb.handlers.LoginHandler(client));
 		handlerHash.put(LOGOUT_PAGE, new com.gr8.bnb.handlers.LogoutHandler());
 		handlerHash.put(SIGNUP_PAGE, new com.gr8.bnb.handlers.SignupHandler(client));
-		handlerHash.put(HOUSES_PAGE, new com.gr8.bnb.handlers.HouseHandler(client));
+		handlerHash.put(HOUSES_PAGE, new com.gr8.bnb.handlers.HouseHandler(client, messageManager));
 		handlerHash.put(MESSAGES_PAGE, new com.gr8.bnb.handlers.MessagesHandler(messageManager));
 		handlerHash.put(MESSAGE_PAGE, new com.gr8.bnb.handlers.MessageHandler(client, messageManager));
 		handlerHash.put(RESULTS_PAGE, new com.gr8.bnb.handlers.ResultsHandler(client));
