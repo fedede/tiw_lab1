@@ -4,19 +4,12 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
@@ -28,9 +21,7 @@ import com.gr8.bnb.helpers.MessageManager;
 
 // Models
 import model.House;
-import model.Transaction;
 import model.TransactionRequest;
-import model.User;
 
 
 /**
@@ -62,12 +53,11 @@ public class HouseHandler implements RequestHandler {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	public String handleGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, NotSupportedException, SystemException {
-		long id = Long.parseLong(request.getParameter("houseId"));
-		WebTarget housePath = houseWebTarget.path("house/" + id);
+		Long id = Long.parseLong(request.getParameter("houseId"));
+		WebTarget housePath = houseWebTarget.path("house").path(id.toString());
 		Builder builder = housePath.request(MediaType.APPLICATION_JSON);
 		Response res = builder.get();
 		
-		HttpSession session = request.getSession();
 		if (res.getStatus() == HttpServletResponse.SC_OK) {
 			House house = res.readEntity(House.class);
 			/* set the user and mark the session as authenticate */

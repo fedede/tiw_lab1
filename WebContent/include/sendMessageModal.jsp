@@ -14,7 +14,7 @@
 			</div>
 			<div class="modal-body">
 				<form class="form-registro" action="message" method="post" id="message-form">
-					<input type="hidden" id="ownerId" name="owner" class="form-control" value="${requestScope.foundHouse.getOwner().getId()}">
+					<input type="hidden" id="ownerId" name="ownerId" class="form-control" value="${requestScope.foundHouse.getOwner().getId()}">
 
 					<textarea name="message">Enter your message here...</textarea>
 					<button class="btn btn-lg btn-primary btn-block" type="submit" id="Registrate">Send</button>
