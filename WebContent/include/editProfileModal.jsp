@@ -25,9 +25,6 @@
 			
 			</div>
 			
-			<div class="modal-footer">
-				<p class="text-center">Do you have an account?<a href="#" id="goSignUpLogin">Log In</a></p>
-			</div>
 		
 		</div>
 	</div>
