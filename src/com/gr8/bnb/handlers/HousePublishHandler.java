@@ -27,7 +27,6 @@ import model.House;
 public class HousePublishHandler implements RequestHandler {
 
 	private static final String HOME_JSP = "/index.jsp";
-	private static final int HTTP_CREATED = 201;
 	
 	WebTarget houseWebTarget;
 	public HousePublishHandler(Client client){
@@ -117,7 +116,7 @@ public class HousePublishHandler implements RequestHandler {
 			Response res = builder.post(Entity.entity(house, MediaType.APPLICATION_JSON));
 			
 			/* Check if resource is created. */
-			if (res.getStatus() != HTTP_CREATED ) {
+			if (res.getStatus() != HttpServletResponse.SC_CREATED ) {
 				errorMessage = "Problem publishing house";
 			}
 		}
