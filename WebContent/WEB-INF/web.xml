@@ -50,4 +50,8 @@
     <servlet-name>FrontControllerServlet</servlet-name>
     <url-pattern>/publishHouse</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FrontControllerServlet</servlet-name>
+    <url-pattern>/booking</url-pattern>
+  </servlet-mapping>
 </web-app>
