@@ -47,6 +47,7 @@ public class FrontControllerServlet extends HttpServlet {
 	private final String USER_HOUSES_PAGE = "/userHouses";
 	private final String EDIT_HOUSE_PAGE = "/editHouse";
 	private final String DELETE_HOUSE_PAGE = "/deleteHouse";
+	private final String BOOKING_ACCEPT_PAGE = "/booking";
 	
 	public void init() throws ServletException {
 		ClientConfig config = new ClientConfig();
@@ -58,7 +59,7 @@ public class FrontControllerServlet extends HttpServlet {
 		handlerHash.put(LOGIN_PAGE, new com.gr8.bnb.handlers.LoginHandler(client));
 		handlerHash.put(LOGOUT_PAGE, new com.gr8.bnb.handlers.LogoutHandler());
 		handlerHash.put(SIGNUP_PAGE, new com.gr8.bnb.handlers.SignupHandler(client));
-		handlerHash.put(HOUSES_PAGE, new com.gr8.bnb.handlers.HouseHandler(client));
+		handlerHash.put(HOUSES_PAGE, new com.gr8.bnb.handlers.HouseHandler(client, messageManager));
 		handlerHash.put(MESSAGES_PAGE, new com.gr8.bnb.handlers.MessagesHandler(messageManager));
 		handlerHash.put(MESSAGE_PAGE, new com.gr8.bnb.handlers.MessageHandler(client, messageManager));
 		handlerHash.put(RESULTS_PAGE, new com.gr8.bnb.handlers.ResultsHandler(client));
@@ -67,6 +68,7 @@ public class FrontControllerServlet extends HttpServlet {
 		handlerHash.put(USER_HOUSES_PAGE, new com.gr8.bnb.handlers.UserHousesHandler(client));
 		handlerHash.put(EDIT_HOUSE_PAGE, new com.gr8.bnb.handlers.EditHouseHandler(client));
 		handlerHash.put(DELETE_HOUSE_PAGE, new com.gr8.bnb.handlers.DeleteHouseHandler(client));
+		handlerHash.put(BOOKING_ACCEPT_PAGE, new com.gr8.bnb.handlers.BookingHandler(client, messageManager));
 		
 		noAuthGet.add(LOGIN_PAGE);
 		noAuthGet.add(SIGNUP_PAGE);

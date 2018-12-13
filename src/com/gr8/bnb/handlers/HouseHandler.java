@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,24 +22,32 @@ import com.gr8.bnb.helpers.MessageManager;
 
 // Models
 import model.House;
+import model.Transaction;
 import model.TransactionRequest;
+import model.User;
 
 
 /**
  * Servlet implementation class HouseServlet
  */
-public class HouseHandler implements RequestHandler {
+public class HouseHandler implements RequestHandler{
 
 	private String HOUSES_PAGE = "/house.jsp";
 	private static final int HTTP_CREATED = 201;
+	private static final String TRANSACTION_LINK = "http://10.211.55.3:8080/TIWbnb/booking";
 	
-	private MessageManager messageManager;
+	MessageManager messageManager;
 	
+	WebTarget userWebtarget;
 	WebTarget transactionWebTarget;
 	WebTarget houseWebTarget;
-	public HouseHandler(Client client){
+	
+	public HouseHandler(Client client, MessageManager messageManager){
 		this.transactionWebTarget = client.target("http://localhost:8083/");
 		this.houseWebTarget = client.target("http://localhost:8082/");
+		this.userWebtarget = client.target("http://localhost:8081/");
+		this.messageManager = messageManager;
+
 	}
 	
 	
@@ -107,13 +116,37 @@ public class HouseHandler implements RequestHandler {
 		/* Check if resource is created. */
 		if (res.getStatus() != HTTP_CREATED ) {
 			errorMessage = "Could not book house";
+		}else{
+			User sender = (User) request.getSession().getAttribute("user");
+			
+			/* Get data from the user API. */
+			WebTarget userPath = userWebtarget.path("users").path(sOwnerId);
+			Builder builder2 = userPath.request(MediaType.APPLICATION_JSON);
+			Response res2 = builder2.get();
+			
+			/* If owner exists then get message data. */
+			if (res2.getStatus() == 200) {
+				User owner = res2.readEntity(User.class);
+				Transaction createdTransaction = res.readEntity(Transaction.class);
+				String message = "Hi " + owner.getName() + "!"
+								+ sender.getName() + " " + sender.getSurname() 
+								+ " wants to rent your house [HOUSENAME] from " 
+								+ sCheckIn + " to " + sCheckOut + "\n"  
+								+ "Accept: " + TRANSACTION_LINK  +  "?accept=true&transaction=" + createdTransaction.getId() + "\n"
+								+ "Reject: " + TRANSACTION_LINK  +  "?accept=false&transaction=" + createdTransaction.getId();
+				boolean success = messageManager.send(sender, owner, message);
+				if (!success) {
+					errorMessage = "It was not possible to send message";
+				}
+			}
 		}
 
 		if (errorMessage != null) {
 			request.setAttribute("bookErrorMessage", errorMessage);
 		}
 		
-		return HOUSES_PAGE+"?houseId="+sRentHouseId;
+		
+		return "/index.jsp";
 		
 	}
 
