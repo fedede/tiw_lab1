@@ -16,7 +16,7 @@ import java.util.List;
 @Table(name="house")
 public class House implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id")
@@ -101,10 +101,12 @@ public class House implements Serializable {
 	public Date getEndDate() {
 		return endDate;
 	}
+	
 
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
+	
 
 	public String getFullDescription() {
 		return fullDescription;
@@ -150,7 +152,7 @@ public class House implements Serializable {
 		this.shared = shared;
 	}
 	
-	public boolean getShared(){
+	public boolean isShared(){
 		return this.shared;
 	}
 	
@@ -181,5 +183,5 @@ public class House implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
+	
 }
