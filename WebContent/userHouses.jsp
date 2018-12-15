@@ -110,9 +110,17 @@
 					<div class="row row-bottom-padded-md">
 						<c:forEach items="${houses}" var="house">
 							<div class="col-md-4 col-sm-6 fh5co-tours animate-box"
-								data-animate-effect="fadeIn">
+								data-animate-effect="fadeIn" id="house-${house.getId()}">
+							    <input type="hidden" id="house-name-${house.getId()}" value="${house.getName()}">
+								<input type="hidden" id="house-full-description-${house.getId()}" value="${house.getFullDescription()}">
+								<input type="hidden" id="house-short-description-${house.getId()}" value="${house.getShortDescription()}">
+								<input type="hidden" id="house-city-${house.getId()}" value="${house.getCity()}">
+								<input type="hidden" id="house-shared-${house.getId()}" value="${house.isShared()}"> 
+								<input type="hidden" id="house-maximum-guests-${house.getId()}" value="${house.getMaxGuests() }">
+								<input type="hidden" id="house-photo-url-${house.getId()}" value="${house.getImageUrl()}">
+								<input type="hidden" id="house-price-${house.getId()}" value="${house.getPrice()}">
 								<div href="#">
-									<img src=${house.getImageUrl()}
+									<img src="${house.getImageUrl()}"
 										alt="Free HTML5 Website Template by FreeHTML5.co"
 										class="img-responsive">
 									<div class="desc">
@@ -121,9 +129,9 @@
 										<span>${house.getShortDescription()}</span> <span class="price">${house.getPrice()}EUR</span>
 										<a class="btn btn-primary btn-outline" href="house?houseId=${house.getId()}">View <i
 											class="icon-arrow-right22"></i></a>
-										<a class="btn btn-primary btn-outline" href="house?houseId=${house.getId()}">Edit <i
+										<a class="btn btn-primary btn-outline" id="edit-${house.getId()}">Edit <i
 											class="icon-arrow-right22"></i></a>
-										<a class="btn btn-primary btn-outline" href="house?houseId=${house.getId()}">Delete <i
+										<a class="btn btn-primary btn-outline" id="delete-${house.getId()}">Delete <i
 											class="icon-arrow-right22"></i></a>
 									</div>
 								</div>
@@ -147,6 +155,8 @@
 				<%@ include file="include/signUpModal.jsp" %>  
 			</c:otherwise>
 		</c:choose>
+		
+		<%@ include file="include/editHouseModal.jsp" %>
             
         <%@ include file="include/footer.jsp" %>
 
@@ -158,6 +168,46 @@
 	<!-- END fh5co-wrapper -->
     <%@ include file="include/scripts.jsp" %>
                 
-
+	<script>
+	$('[id^=edit-]').on('click', function () {
+		var self = this;
+		var id = self.id;
+		var houseId = id.replace('edit-', '');
+		
+		/* Set the modal to the current house id */
+		$('#editHouseId').val(houseId);
+		$('#editHouseName').val($('#house-name-' + houseId).val());
+		$('#editHouseFullDescription').val($('#house-full-description-' + houseId).val());
+		$('#editHouseShortDescription').val($('#house-short-description-' + houseId).val());
+		$('#editHouseCity').val($('#house-city-' + houseId).val());
+		var shared = ($('#house-shared-' +houseId).val() == true) ? 'shared' : 'private';
+		$('#editHouseType').val(shared);
+		$('#editHouseGuestNumber').val($('#house-maximum-guests-' + houseId).val());
+		$('#editHousePhoto').val($('#house-photo-url-' + houseId).val());
+		$('#editHousePrice').val($('#house-price-' + houseId).val());
+		$('#HouseEditModal').modal('show');
+	});
+	
+	$('[id^=delete-]').on('click', function () {
+		var self = this;
+		
+		var id = self.id;
+		var houseId = id.replace('delete-', '');
+		$.ajax({
+			type: "POST",
+			url: "${pageContext.request.contextPath}/deleteHouse",
+			data: {
+				houseId: houseId,
+			},
+			success: function (data) {
+				$('#house-' + houseId).remove();
+			},
+			error: function (data) {
+				console.log(data.responseText);
+			}
+		});
+		
+	});
+	</script>
 </body>
 </html>

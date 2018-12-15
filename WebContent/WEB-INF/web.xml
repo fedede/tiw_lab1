@@ -52,6 +52,14 @@
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>FrontControllerServlet</servlet-name>
+    <url-pattern>/editHouse</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FrontControllerServlet</servlet-name>
+    <url-pattern>/deleteHouse</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FrontControllerServlet</servlet-name>
     <url-pattern>/booking</url-pattern>
   </servlet-mapping>
 </web-app>

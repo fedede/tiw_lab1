@@ -18,7 +18,6 @@ import org.glassfish.jersey.client.ClientConfig;
 import com.gr8.bnb.handlers.RequestHandler;
 import com.gr8.bnb.helpers.MessageManager;
 
-
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +25,6 @@ import java.util.HashMap;
 /**  
  * Servlet implementation class ControllerServlet
  */ 
-  
 public class FrontControllerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	    
@@ -47,6 +45,8 @@ public class FrontControllerServlet extends HttpServlet {
 	private final String EDITPROFILE_PAGE = "/editprofile";
 	private final String PUBLISHHOUSE_PAGE = "/publishHouse";
 	private final String USER_HOUSES_PAGE = "/userHouses";
+	private final String EDIT_HOUSE_PAGE = "/editHouse";
+	private final String DELETE_HOUSE_PAGE = "/deleteHouse";
 	private final String BOOKING_ACCEPT_PAGE = "/booking";
 	
 	public void init() throws ServletException {
@@ -66,6 +66,8 @@ public class FrontControllerServlet extends HttpServlet {
 		handlerHash.put(EDITPROFILE_PAGE, new com.gr8.bnb.handlers.EditProfileHandler(client));
 		handlerHash.put(PUBLISHHOUSE_PAGE, new com.gr8.bnb.handlers.HousePublishHandler(client));
 		handlerHash.put(USER_HOUSES_PAGE, new com.gr8.bnb.handlers.UserHousesHandler(client));
+		handlerHash.put(EDIT_HOUSE_PAGE, new com.gr8.bnb.handlers.EditHouseHandler(client));
+		handlerHash.put(DELETE_HOUSE_PAGE, new com.gr8.bnb.handlers.DeleteHouseHandler(client));
 		handlerHash.put(BOOKING_ACCEPT_PAGE, new com.gr8.bnb.handlers.BookingHandler(client, messageManager));
 		
 		noAuthGet.add(LOGIN_PAGE);

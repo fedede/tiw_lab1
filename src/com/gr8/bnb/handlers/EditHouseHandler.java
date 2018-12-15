@@ -24,34 +24,34 @@ import model.User;
 //import com.gr8.bnb.helpers.InputChecker;
 import model.House;
 
-public class HousePublishHandler implements RequestHandler {
+public class EditHouseHandler implements RequestHandler {
 
 	private static final String HOME_JSP = "/index.jsp";
 	
 	WebTarget houseWebTarget;
-	public HousePublishHandler(Client client){
+	public EditHouseHandler(Client client){
 		this.houseWebTarget = client.target("http://localhost:8082/");
 	}
 	
 	public String handleGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, NotSupportedException, SystemException{
-		request.setAttribute("isHousePubPage", (Boolean) true);
-		return HOME_JSP;
+		return null;
 	}
 
 	public String handlePost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, NotSupportedException, SystemException {
 		String errorMessage = null;
 		
 		/* Get parameters. */
-		String houseName = request.getParameter("inputHousename");
-		String fullDescription = request.getParameter("inputFulldescription");
-		String shortDescription = request.getParameter("inputShortdescription");
-		String type = request.getParameter("inputHousetype");
-		String sPrice = request.getParameter("inputHouseprice");
-		String sMaxGuests  = request.getParameter("inputGuestnumber");
-		String photoURL = request.getParameter("inputHousephoto");
-		String city = request.getParameter("inputHousecity");
-		String sStartDate = request.getParameter("inputHousedatestart");
-		String sEndDate = request.getParameter("inputHousedateend");
+		String houseId = request.getParameter("editHouseId");
+		String houseName = request.getParameter("editHouseName");
+		String fullDescription = request.getParameter("editHouseFullDescription");
+		String shortDescription = request.getParameter("editHouseShortDescription");
+		String type = request.getParameter("editHouseType");
+		String sPrice = request.getParameter("editHousePrice");
+		String sMaxGuests  = request.getParameter("editHouseGuestNumber");
+		String photoURL = request.getParameter("editHousePhoto");
+		String city = request.getParameter("editHouseCity");
+		String sStartDate = request.getParameter("editHouseDateStart");
+		String sEndDate = request.getParameter("editHouseDateEnd");
 		
 		HttpSession session = request.getSession();
 
@@ -110,23 +110,22 @@ public class HousePublishHandler implements RequestHandler {
 			house.setOwner(owner);
 			
 			/* Perform post request to API. */
-			WebTarget housePath = houseWebTarget.path("house");
+			WebTarget housePath = houseWebTarget.path("house").path(houseId);
 			Builder builder = housePath.request(MediaType.APPLICATION_JSON);
 			
-			Response res = builder.post(Entity.entity(house, MediaType.APPLICATION_JSON));
+			Response res = builder.put(Entity.entity(house, MediaType.APPLICATION_JSON));
 			
 			/* Check if resource is created. */
-			if (res.getStatus() != HttpServletResponse.SC_CREATED ) {
+			if (res.getStatus() != HttpServletResponse.SC_OK ) {
 				errorMessage = "Problem publishing house";
 			}
+
 		}
 		
 		/* If error message send message to the view */
 		if (errorMessage != null) {
-			request.setAttribute("isHousePubPage", (Boolean) true);
 			request.setAttribute("errorMessage", errorMessage);
 		}
-
 		/* Redirect to home page */
 		return HOME_JSP;
 	}
