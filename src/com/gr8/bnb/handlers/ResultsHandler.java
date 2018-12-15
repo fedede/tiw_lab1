@@ -59,32 +59,33 @@ public class ResultsHandler implements  RequestHandler {
 		WebTarget housePath = houseWebTarget.path("houses");
 		
 		/* Add to the query the non null parameters. */
-		if (city != null) {
-			housePath.queryParam("city", city);
+		if (city != null && !city.isEmpty()) {
+			housePath = housePath.queryParam("city", city);
+			
 		}
 		
-		if (minPrice != null) {
-			housePath.queryParam("minPrice", minPrice);
+		if (minPrice != null && !minPrice.isEmpty()) {
+			housePath = housePath.queryParam("minPrice", minPrice);
 		}
 		
-		if (maxPrice != null) {
-			housePath.queryParam("maxPrice", maxPrice);
+		if (maxPrice != null&& !maxPrice.isEmpty()) {
+			housePath = housePath.queryParam("maxPrice", maxPrice);
 		}
 		
-		if (guestCount != null) {
-			housePath.queryParam("guestCount", guestCount);
+		if (guestCount != null && !guestCount.isEmpty()) {
+			housePath = housePath.queryParam("guestCount", guestCount);
 		}
 		
 		if (shared != null) {
-			housePath.queryParam("shared", shared);
+			housePath = housePath.queryParam("shared", shared);
 		}
 		
-		if (startDate != null) {
-			housePath.queryParam("startDate", startDate);
+		if (startDate != null && !startDate.isEmpty()) {
+			housePath = housePath.queryParam("startDate", startDate);
 		}
 		
-		if (endDate != null) {
-			housePath.queryParam("endDate", endDate);
+		if (endDate != null && !startDate.isEmpty()) {
+			housePath = housePath.queryParam("endDate", endDate);
 		}
 		
 		/* Perform the request. */
@@ -94,6 +95,7 @@ public class ResultsHandler implements  RequestHandler {
 		House[] houses = null;
 		if (res.getStatus() == HttpServletResponse.SC_OK) {
 			houses = res.readEntity(House[].class);
+			
 			request.setAttribute("houses", houses);
 		} else {
 			errorMessage = "Couldn't read houses";
