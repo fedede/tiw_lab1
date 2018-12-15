@@ -34,7 +34,7 @@ public class HouseHandler implements RequestHandler{
 
 	private String HOUSES_PAGE = "/house.jsp";
 	private static final int HTTP_CREATED = 201;
-	private static final String TRANSACTION_LINK = "http://10.211.55.3:8080/TIWbnb/booking";
+	private static final String TRANSACTION_LINK = "http://<IP>:8080/TIWbnb/booking";
 	
 	MessageManager messageManager;
 	
@@ -69,7 +69,6 @@ public class HouseHandler implements RequestHandler{
 		} else {
 			return "/error.jsp";
 		}
-
 		return HOUSES_PAGE;
 	}
 

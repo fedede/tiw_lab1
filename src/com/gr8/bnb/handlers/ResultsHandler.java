@@ -42,7 +42,7 @@ public class ResultsHandler implements  RequestHandler {
 		String errorMessage = null;
 
 		/* Get parameters from modal. */
-		String city =  request.getParameter("city").toUpperCase();
+		String city =  request.getParameter("city");
 		String startDate =  request.getParameter("date-start");
 		String endDate =  request.getParameter("date-end");
 		String minPrice = request.getParameter("min-price");

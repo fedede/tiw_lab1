@@ -28,7 +28,9 @@ public class MessagesHandler implements RequestHandler {
 		User receiver = (User) httpSession.getAttribute("user");
 
 		Message[] messages = messageManager.receive(receiver);
-		
+		for(Message message: messages){
+			message.setContent(message.getContent().replace("<IP>", request.getLocalAddr()));
+		}
 		request.setAttribute("messages", messages);
 		
 		return MESSAGES_JSP;
