@@ -68,7 +68,7 @@ public class ResultsHandler implements  RequestHandler {
 			housePath = housePath.queryParam("minPrice", minPrice);
 		}
 		
-		if (maxPrice != null&& !maxPrice.isEmpty()) {
+		if (maxPrice != null && !maxPrice.isEmpty()) {
 			housePath = housePath.queryParam("maxPrice", maxPrice);
 		}
 		
